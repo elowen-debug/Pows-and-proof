@@ -1,0 +1,2164 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paws & Proof – Interactive Web Prototype</title>
+  <style>
+    :root{
+      --bg:#faf6f0;
+      --surface:#ffffff;
+      --surface-soft:#fffaf4;
+      --text:#22303a;
+      --muted:#6b7680;
+      --primary:#f58a2c;
+      --primary-dark:#d56f12;
+      --primary-soft:#fff1df;
+      --danger:#d84f4f;
+      --danger-soft:#fff0f0;
+      --warning:#e9a327;
+      --warning-soft:#fff7e5;
+      --success:#4c8c5f;
+      --success-soft:#eef9f1;
+      --border:#eadfce;
+      --shadow:0 18px 40px rgba(47, 56, 68, .09);
+      --radius:22px;
+      --radius-sm:14px;
+      --nav-h:76px;
+      --content-w:720px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,#fbf7f2 0%,#f7f1e8 100%);color:var(--text);font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}
+    body{min-height:100vh}
+    button, input, select, textarea{font:inherit}
+    button{border:none;cursor:pointer}
+    a{text-decoration:none;color:inherit}
+    .app{max-width:var(--content-w);margin:0 auto;padding:0 16px calc(var(--nav-h) + 26px)}
+    .topbar{
+      position:sticky; top:0; z-index:30;
+      backdrop-filter: blur(14px);
+      background:rgba(250,246,240,.82);
+      border-bottom:1px solid rgba(234,223,206,.78);
+    }
+    .topbar-inner{
+      max-width:var(--content-w);margin:0 auto;padding:14px 16px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:12px;
+      background:none;padding:0;color:var(--text);text-align:left
+    }
+    .brand-mark{
+      width:40px;height:40px;border-radius:14px;
+      display:grid;place-items:center;font-size:20px;
+      background:linear-gradient(135deg,var(--primary-soft),#fff5e7);
+      box-shadow:inset 0 0 0 1px rgba(245,138,44,.15);
+    }
+    .brand-title{font-weight:800;letter-spacing:.2px}
+    .brand-sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .lang-switch{
+      display:flex;gap:6px;padding:4px;background:#fff;border-radius:999px;border:1px solid var(--border)
+    }
+    .lang-switch button{
+      padding:8px 12px;border-radius:999px;background:transparent;color:var(--muted);font-weight:700
+    }
+    .lang-switch button.active{
+      background:var(--primary);color:#fff;box-shadow:0 8px 16px rgba(245,138,44,.24)
+    }
+    .screen{display:none;animation:fadeIn .28s ease}
+    .screen.active{display:block}
+    @keyframes fadeIn{
+      from{opacity:.12;transform:translateY(10px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    .panel{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px;
+      margin-top:18px;
+    }
+    .hero{
+      padding:28px 22px;
+      background:
+        radial-gradient(circle at top right, rgba(245,138,44,.12), transparent 34%),
+        linear-gradient(180deg,#fffdf9 0%, #fff7ec 100%);
+    }
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--border);
+      color:var(--muted);font-size:13px;font-weight:700
+    }
+    h1,h2,h3,p{margin:0}
+    .hero h1{margin-top:16px;font-size:32px;line-height:1.1}
+    .hero p.lead{margin-top:12px;color:var(--muted);line-height:1.6;font-size:16px}
+    .btn-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+    .btn{
+      min-height:48px;border-radius:16px;padding:14px 18px;font-weight:800;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.18s ease
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn-primary{background:var(--primary);color:#fff;box-shadow:0 14px 26px rgba(245,138,44,.25)}
+    .btn-secondary{background:#fff;color:var(--text);border:1px solid var(--border)}
+    .btn-danger{background:var(--danger);color:#fff;box-shadow:0 14px 24px rgba(216,79,79,.22)}
+    .btn-soft{background:var(--primary-soft);color:var(--primary-dark)}
+    .btn-ghost{background:transparent;color:var(--muted)}
+    .btn-block{width:100%}
+    .chip-row,.trust-row,.quick-row,.metric-row{
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:18px
+    }
+    .chip,.trust,.metric{
+      display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;
+      background:var(--surface-soft);border:1px solid var(--border);color:var(--text);font-size:13px
+    }
+    .trust{background:#fff}
+    .grid{
+      display:grid;gap:14px;margin-top:18px
+    }
+    .grid.two{grid-template-columns:1fr 1fr}
+    .mini-card,.tool-card,.resource-card,.result-card,.summary-card{
+      background:#fff;border:1px solid var(--border);border-radius:20px;padding:18px;
+      box-shadow:0 10px 26px rgba(34,48,58,.05)
+    }
+    .mini-card h3,.tool-card h3,.resource-card h3,.result-card h3,.summary-card h3{font-size:16px}
+    .mini-card p,.tool-card p,.resource-card p,.result-card p,.summary-card p{
+      color:var(--muted);line-height:1.55;margin-top:8px;font-size:14px
+    }
+    .section-title{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px
+    }
+    .section-title h2{font-size:25px;line-height:1.2}
+    .section-title p{color:var(--muted);margin-top:8px;line-height:1.55}
+    .muted{color:var(--muted)}
+    .small{font-size:13px}
+    .step-card{
+      padding:22px;border:1px solid var(--border);border-radius:24px;
+      background:linear-gradient(180deg,#fffdfa 0%, #fff7ec 100%);
+      min-height:280px;
+      display:flex;flex-direction:column;justify-content:space-between
+    }
+    .step-index{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-width:46px;height:46px;padding:0 14px;border-radius:999px;
+      background:#fff;border:1px solid var(--border);font-weight:800
+    }
+    .step-icon{
+      width:60px;height:60px;border-radius:18px;display:grid;place-items:center;
+      font-size:28px;background:rgba(255,255,255,.88);border:1px solid var(--border);margin-top:16px
+    }
+    .step-card h3{margin-top:16px;font-size:24px;line-height:1.2}
+    .step-card p{margin-top:10px;color:var(--muted);line-height:1.6}
+    .tip{
+      margin-top:14px;padding:12px 14px;border-radius:16px;background:#fff;border:1px solid var(--border);
+      color:#59636d;font-size:14px;line-height:1.5
+    }
+    .dot-row{display:flex;gap:8px;justify-content:center;margin-top:14px}
+    .dot{
+      width:8px;height:8px;border-radius:999px;background:#d8d0c4
+    }
+    .dot.active{width:28px;background:var(--primary)}
+    .nav-inline{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px
+    }
+    .progress-wrap{
+      margin-top:18px;padding:14px;border:1px solid var(--border);border-radius:18px;background:#fff
+    }
+    .progress-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .progress-head h3{font-size:15px}
+    .progress{
+      width:100%;height:10px;border-radius:999px;background:#efe8dc;overflow:hidden;margin-top:12px
+    }
+    .progress > span{
+      display:block;height:100%;background:linear-gradient(90deg,var(--primary) 0%, #f6b15e 100%);
+      border-radius:999px;transition:width .24s ease
+    }
+    .question-card{
+      margin-top:18px;padding:22px;border-radius:24px;border:1px solid var(--border);background:#fff
+    }
+    .question-tag{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;
+      background:var(--primary-soft);color:var(--primary-dark);font-weight:800;font-size:13px
+    }
+    .question-card h2{margin-top:14px;font-size:28px;line-height:1.18}
+    .question-help{margin-top:10px;color:var(--muted);line-height:1.6}
+    .answer-grid{
+      display:grid;grid-template-columns:1fr;gap:12px;margin-top:20px
+    }
+    .answer-btn{
+      width:100%;padding:16px 18px;border-radius:18px;background:#fff;border:1px solid var(--border);
+      text-align:left;font-weight:800;color:var(--text)
+    }
+    .answer-btn:hover{border-color:rgba(245,138,44,.55);box-shadow:0 10px 20px rgba(245,138,44,.10)}
+    details{
+      margin-top:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface-soft);
+      overflow:hidden
+    }
+    summary{
+      list-style:none;padding:14px 16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px
+    }
+    summary::-webkit-details-marker{display:none}
+    details p{
+      padding:0 16px 16px;color:var(--muted);line-height:1.6
+    }
+    .banner{
+      display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:18px;font-weight:700
+    }
+    .banner.info{background:var(--primary-soft);color:var(--primary-dark)}
+    .banner.warn{background:var(--warning-soft);color:#8c5b00}
+    .banner.danger{background:var(--danger-soft);color:#a83d3d}
+    .banner.success{background:var(--success-soft);color:#2f6a40}
+    .result-hero{
+      display:grid;gap:14px;
+      background:linear-gradient(180deg,#fffdfa 0%,#fff7ec 100%);
+      border-radius:24px;padding:22px;border:1px solid var(--border)
+    }
+    .result-top{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap
+    }
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;
+      font-size:13px;font-weight:800;border:1px solid transparent
+    }
+    .pill.info{background:var(--primary-soft);color:var(--primary-dark)}
+    .pill.warn{background:var(--warning-soft);color:#8c5b00}
+    .pill.danger{background:var(--danger-soft);color:#9c3838}
+    .pill.success{background:var(--success-soft);color:#2f6a40}
+    .result-hero h2{font-size:28px;line-height:1.18}
+    .result-hero p{color:var(--muted);line-height:1.6}
+    .list{
+      margin-top:12px;display:grid;gap:10px
+    }
+    .list-item{
+      display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:16px;background:#fff;border:1px solid var(--border)
+    }
+    .list-item .bullet{
+      width:24px;height:24px;border-radius:999px;display:grid;place-items:center;
+      background:var(--surface-soft);font-size:13px;font-weight:800;flex:0 0 auto;margin-top:2px
+    }
+    .list-item strong{display:block}
+    .list-item span{display:block;color:var(--muted);line-height:1.55;font-size:14px}
+    .tool-row{display:grid;gap:14px;margin-top:18px}
+    .tool-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    .timer-box{
+      margin-top:14px;padding:16px;border-radius:18px;background:#fff;border:1px dashed rgba(245,138,44,.45)
+    }
+    .timer-display{
+      font-size:28px;font-weight:900;letter-spacing:.3px;margin-top:8px
+    }
+    .meta-grid{display:grid;gap:14px;margin-top:18px}
+    .meta-grid.two{grid-template-columns:1fr 1fr}
+    label{
+      display:block;font-weight:800;font-size:14px;margin-bottom:8px
+    }
+    input[type="text"], select, textarea{
+      width:100%;padding:14px 14px;border-radius:16px;border:1px solid var(--border);background:#fff;color:var(--text)
+    }
+    textarea{min-height:160px;resize:vertical;line-height:1.5}
+    .form-grid{display:grid;gap:14px;margin-top:18px}
+    .age-result, .help-preview{
+      margin-top:18px;padding:18px;border-radius:20px;background:linear-gradient(180deg,#fffdfa 0%,#fff7ec 100%);
+      border:1px solid var(--border)
+    }
+    .age-badge{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--border);font-weight:800
+    }
+    .age-result h3{margin-top:12px;font-size:24px}
+    .age-result p{margin-top:10px;line-height:1.6;color:var(--muted)}
+    .resource-grid{display:grid;gap:14px;margin-top:18px}
+    .resource-list{margin-top:12px;display:grid;gap:8px}
+    .resource-item{
+      padding:12px 14px;border-radius:16px;background:var(--surface-soft);border:1px solid var(--border);font-size:14px;line-height:1.5
+    }
+    .summary-stack{display:grid;gap:14px;margin-top:18px}
+    .summary-row{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px dashed #eadfce
+    }
+    .summary-row:last-child{border-bottom:none;padding-bottom:0}
+    .summary-key{font-weight:800}
+    .summary-value{text-align:right;color:var(--muted);line-height:1.5}
+    .copy-box{
+      margin-top:14px;padding:16px;border-radius:18px;background:#fff;border:1px solid var(--border);white-space:pre-wrap;line-height:1.6;color:#2d3a43
+    }
+    .empty-state{
+      padding:22px;border-radius:20px;border:1px dashed var(--border);background:#fff;color:var(--muted);line-height:1.6
+    }
+    .footer-space{height:18px}
+    .bottom-nav{
+      position:fixed;left:50%;transform:translateX(-50%);bottom:12px;z-index:40;
+      width:min(calc(100% - 20px), calc(var(--content-w) - 16px));
+      background:rgba(255,255,255,.94);backdrop-filter:blur(18px);
+      border:1px solid rgba(234,223,206,.9);border-radius:22px;padding:10px;
+      box-shadow:0 16px 40px rgba(34,48,58,.14);
+      display:grid;grid-template-columns:repeat(5,1fr);gap:8px
+    }
+    .nav-btn{
+      background:transparent;border-radius:16px;padding:10px 6px;display:grid;gap:6px;place-items:center;color:var(--muted);font-size:11px;font-weight:800
+    }
+    .nav-btn .icon{font-size:18px}
+    .nav-btn.active{
+      background:var(--primary-soft);color:var(--primary-dark)
+    }
+    .toast{
+      position:fixed;left:50%;transform:translateX(-50%);
+      bottom:104px;z-index:60;background:#23303a;color:#fff;padding:12px 16px;border-radius:999px;
+      box-shadow:0 12px 28px rgba(0,0,0,.16);opacity:0;pointer-events:none;transition:.2s ease
+    }
+    .toast.show{opacity:1}
+    .modal{
+      position:fixed;inset:0;background:rgba(34,48,58,.36);z-index:70;display:none;align-items:center;justify-content:center;padding:18px
+    }
+    .modal.show{display:flex}
+    .modal-card{
+      width:min(100%, 460px);background:#fff;border-radius:24px;border:1px solid var(--border);box-shadow:var(--shadow);padding:24px
+    }
+    .modal-card h3{font-size:24px;line-height:1.2}
+    .modal-card p{margin-top:12px;color:var(--muted);line-height:1.6}
+    .modal-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .sim-note{
+      padding:12px 14px;border-radius:16px;background:var(--surface-soft);border:1px dashed var(--border);
+      color:var(--muted);font-size:14px;line-height:1.55
+    }
+    @media (min-width:680px){
+      .hero{padding:34px 28px}
+      .answer-grid{grid-template-columns:repeat(3,1fr)}
+      .resource-grid{grid-template-columns:1fr 1fr}
+      .tool-row{grid-template-columns:1fr 1fr}
+      .form-grid.two{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width:420px){
+      .hero h1,.question-card h2,.result-hero h2,.step-card h3,.section-title h2{font-size:24px}
+      .topbar-inner{padding:12px 14px}
+      .app{padding:0 14px calc(var(--nav-h) + 24px)}
+      .panel,.question-card,.result-hero{padding:18px}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button class="brand" onclick="goScreen('home')">
+        <div class="brand-mark">🐾</div>
+        <div>
+          <div class="brand-title">Paws &amp; Proof</div>
+          <div class="brand-sub" id="brandSub"></div>
+        </div>
+      </button>
+      <div class="lang-switch" aria-label="Language switch">
+        <button id="langCn" class="active" onclick="setLang('cn')">CN</button>
+        <button id="langEn" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app">
+    <section id="screen-home" class="screen active"></section>
+    <section id="screen-first30" class="screen"></section>
+    <section id="screen-decision" class="screen"></section>
+    <section id="screen-result" class="screen"></section>
+    <section id="screen-age" class="screen"></section>
+    <section id="screen-help" class="screen"></section>
+    <section id="screen-resources" class="screen"></section>
+    <section id="screen-summary" class="screen"></section>
+    <div class="footer-space"></div>
+  </main>
+
+  <nav class="bottom-nav" id="bottomNav"></nav>
+  <div class="toast" id="toast"></div>
+
+  <div class="modal" id="modal">
+    <div class="modal-card">
+      <h3 id="modalTitle"></h3>
+      <p id="modalBody"></p>
+      <div class="modal-actions" id="modalActions"></div>
+    </div>
+  </div>
+
+  <script>
+    const content = {
+      cn: {
+        brandSub: "新手救助者的数字第一响应工具",
+        nav: {
+          home: "首页",
+          start: "开始",
+          age: "估龄",
+          help: "求助",
+          summary: "摘要"
+        },
+        home: {
+          eyebrow: "低门槛 · 现场可用 · 移动端优先",
+          title: "当你发现一只流浪幼猫时，先不要慌。",
+          lead: "这个网页原型把原本的 Figma 决策流程改成了可点击的交互网页。它会带你完成：先观察、再判断、再执行、最后求助。",
+          primary: "发现流浪幼猫？从这里开始",
+          emergency: "出现异常征兆？立即查看紧急处理",
+          chips: [
+            "约 2 分钟完成首轮判断",
+            "每次只做一个判断",
+            "不替代兽医诊断"
+          ],
+          cards: [
+            {
+              icon: "🔎",
+              title: "Quick Age Check",
+              body: "根据眼睛、耳朵、行动和牙齿做一个粗略估龄，帮助判断护理方式。",
+              action: "打开估龄工具",
+              click: "goScreen('age')"
+            },
+            {
+              icon: "🆘",
+              title: "How to Ask for Help",
+              body: "把现场信息整理成一段可复制的求助文案，便于发到社群或给志愿者看。",
+              action: "打开求助模板",
+              click: "goScreen('help')"
+            },
+            {
+              icon: "📚",
+              title: "Resources",
+              body: "按任务查看：第一反应、保暖、喂养基础、转运和可信学习资源。",
+              action: "打开资源库",
+              click: "goScreen('resources')"
+            }
+          ],
+          trust: [
+            "适合第一次遇到幼猫的人",
+            "优先帮助你做下一步而不是读长文",
+            "包含不确定选项，减少误判压力"
+          ]
+        },
+        first30: {
+          title: "紧急前 30 分钟",
+          subtitle: "先降低焦虑，再做判断。每一步只做一件事。",
+          prev: "上一步",
+          next: "下一步",
+          done: "我已完成初步观察，开始判断下一步",
+          steps: [
+            {
+              icon: "🫶",
+              title: "先停一下，别急着抱走",
+              body: "你不需要立刻懂所有知识。先做最安全的观察，再决定下一步。",
+              tip: "目标：把“马上行动”的冲动，转换成“先确认情况”的节奏。"
+            },
+            {
+              icon: "↔️",
+              title: "保持距离",
+              body: "退后约 5–10 米，避免围观，让环境尽量安静，减少对母猫的惊扰。",
+              tip: "如果很多人围着看，母猫更可能不敢回来。"
+            },
+            {
+              icon: "⏳",
+              title: "原地观察",
+              body: "不要立刻触碰或抱走。猫妈妈可能只是去觅食、躲人，或者短暂离开。",
+              tip: "短时间没看到母猫，不等于幼猫已经被遗弃。"
+            },
+            {
+              icon: "📷",
+              title: "拍摄记录",
+              body: "拍下幼猫及周围环境，记录时间、地点、天气和是否出现过母猫。",
+              tip: "这些记录会直接帮助你后续线上求助或向医院说明情况。"
+            },
+            {
+              icon: "🛡️",
+              title: "先处理环境风险",
+              body: "若幼猫在车流、狗群、暴雨曝晒或下水道附近，优先把它短距离移到附近更安全的位置。",
+              tip: "只移动到附近安全点，避免过远带离导致母猫找不到。"
+            }
+          ]
+        },
+        decision: {
+          title: "交互式决策工具",
+          subtitle: "一屏一个问题。每题都可以选择“我不确定”。",
+          stepLabel: "问题",
+          buttons: {
+            yes: "是",
+            no: "否",
+            unsure: "不确定",
+            restart: "重新开始",
+            back: "返回上一题"
+          },
+          qHelpLabel: "怎么判断？",
+          questions: [
+            {
+              id: "q0",
+              label: "环境风险",
+              title: "幼猫当前所处位置是否有立即危险？",
+              help: "比如车道、暴雨曝晒、下水道口、狗群附近或会被人群踩踏的地方。",
+              detail: "先判断“环境是否马上会伤害到它”。如果有即时风险，先处理环境，再观察母猫是否回来。"
+            },
+            {
+              id: "q1",
+              label: "母猫情况",
+              title: "猫妈妈在附近吗？",
+              help: "若你看见母猫返回、徘徊或有明显喂奶迹象，优先选择“是”。",
+              detail: "母猫可能不会在人类靠得太近时出现。保持距离更容易得到真实判断。"
+            },
+            {
+              id: "q2",
+              label: "身体状态",
+              title: "幼猫是否有明显伤口、呼吸困难、极度虚弱或持续尖叫？",
+              help: "这一步主要用于识别需要尽快送医的情况。",
+              detail: "看不到外伤不代表没事。呼吸急促、无力抬头、对刺激反应很弱，都应提高警觉。"
+            },
+            {
+              id: "q3",
+              label: "体温状态",
+              title: "触摸幼猫时，它的身体是否冰凉？",
+              help: "如果明显偏冷，先保暖，不要急着喂食。",
+              detail: "体温低时消化和吞咽都可能有风险。先稳定体温，再决定下一步护理。"
+            }
+          ]
+        },
+        modals: {
+          q2Title: "无法确定是否受伤？",
+          q2Body: "在现场无法清楚判断时，优先保守处理更安全。你可以直接进入紧急处理，也可以继续下一题。",
+          q2Urgent: "转到紧急处理",
+          q2Continue: "继续判断",
+          q3Title: "先保暖，不要喂食",
+          q3Body: "如果幼猫摸起来很冷，先做保暖，再决定喂食或转送。这个原型会先把你带到“保暖与初步护理”页面。",
+          q3Confirm: "知道了"
+        },
+        result: {
+          sectionTitle: "详细结果页",
+          sectionSub: "这里不是阅读终点，而是立即行动的工作台。",
+          tools: "可用工具",
+          now: "现在就做",
+          avoid: "先别这样做",
+          escalate: "什么时候升级处理",
+          why: "为什么会得到这个建议？",
+          whyLabel: "展开说明",
+          goAge: "打开估龄工具",
+          goHelp: "生成求助文案",
+          goSummary: "查看现场摘要",
+          backHome: "回到首页",
+          timerTitle: "观察倒计时",
+          timerSub: "为“原地观察”路径准备的轻量倒计时工具。",
+          timer30: "30 分钟",
+          timer120: "2 小时",
+          timer240: "4 小时",
+          timerIdle: "尚未启动倒计时",
+          timerActive: "剩余时间",
+          timerEnded: "建议重新评估：倒计时已结束",
+          clinicTitle: "24 小时医院入口（原型占位）",
+          clinicSub: "正式开发时可接入地图 API。交互原型中展示的是按钮与信息结构，而非真实定位结果。",
+          clinicButton: "模拟查找最近 24 小时宠物医院",
+          clinicHint: "示例：这里可展示“附近医院卡片、距离、营业状态、导航入口”。",
+          summaryButton: "复制摘要",
+          definitions: {
+            A: {
+              pill: "建议 A",
+              pillTone: "info",
+              title: "原地观察 Wait & Watch",
+              intro: "当前最优先的动作，是继续保持距离并观察母猫是否回来，而不是立刻带走。",
+              now: [
+                "开始一个观察倒计时：30 分钟、2 小时或 4 小时。",
+                "保持现场安静，减少围观和重复靠近。",
+                "继续记录母猫是否出现、是否喂奶、幼猫是否变冷或持续尖叫。"
+              ],
+              avoid: [
+                "不要因为焦虑立刻抱走。",
+                "不要频繁触碰，避免打断母猫接近。",
+                "不要在公开平台暴露过于精确的位置。"
+              ],
+              escalate: [
+                "观察窗口结束仍未见母猫。",
+                "幼猫开始变冷、变弱或环境转危险。",
+                "出现伤口、呼吸异常、明显虚弱。"
+              ],
+              why: "因为母猫在附近时，最安全的第一选择通常是观察而不是立刻介入。对新手来说，网页应先帮助用户降低误判和过度干预。"
+            },
+            B: {
+              pill: "建议 B",
+              pillTone: "warn",
+              title: "保暖与初步护理 Warming & Care",
+              intro: "如果幼猫偏冷、无明显重伤，当前优先级是保暖和稳定，而不是立刻喂食。",
+              now: [
+                "用纸箱、毛巾和包裹好的暖源做一个简易保暖窝。",
+                "让窝里保持一半温暖、一半较凉，避免过热。",
+                "先保暖，再决定是否需要喂食或继续观察。"
+              ],
+              avoid: [
+                "不要给牛奶。",
+                "不要在幼猫很冷时立刻喂食。",
+                "不要急着洗澡或长时间抱在外面吹风。"
+              ],
+              escalate: [
+                "保暖后仍无力、无反应或呼吸异常。",
+                "发现寄生虫、外伤、持续虚弱。",
+                "你无法判断年龄或护理方式。"
+              ],
+              why: "因为低体温会让吞咽和消化更危险。网页在这里要把用户从“喂点东西”这种直觉操作，切换到更安全的“先保暖”。"
+            },
+            C: {
+              pill: "建议 C",
+              pillTone: "danger",
+              title: "紧急送医 Emergency Medical Care",
+              intro: "如果幼猫有明显伤口、呼吸困难或极度虚弱，应优先寻求兽医帮助。",
+              now: [
+                "先保持安静并尽量保暖。",
+                "把幼猫放入铺有毛巾的纸箱或安全容器中。",
+                "尽快前往宠物医院或联系能提供现场指导的专业机构。"
+              ],
+              avoid: [
+                "不要反复抱出查看。",
+                "不要边移动边尝试复杂处理。",
+                "不要因为不确定而拖延太久。"
+              ],
+              escalate: [
+                "已经属于最高优先级路径。",
+                "运输途中若状态继续恶化，应在联系医院时说明症状。",
+                "到院前保持温暖与安静。"
+              ],
+              why: "因为这类症状代表网页不该再让用户停留在“继续阅读”，而应该立刻把界面转为“执行模式”。"
+            },
+            D: {
+              pill: "建议 D",
+              pillTone: "success",
+              title: "先移到附近安全点，再观察",
+              intro: "如果环境本身有立即危险，可以把幼猫短距离移到附近更安全的位置，然后继续观察母猫。",
+              now: [
+                "只移动到附近安全点，不要带离太远。",
+                "在新的安全点继续等待与观察。",
+                "记录新位置、时间，以及母猫是否能找到幼猫。"
+              ],
+              avoid: [
+                "不要因为环境危险而直接带回家很远。",
+                "不要把幼猫放进完全暴露或太冷太热的地方。",
+                "不要忘记继续观察母猫。"
+              ],
+              escalate: [
+                "移到安全点后仍未见母猫且幼猫变弱。",
+                "环境条件继续恶化。",
+                "你发现伤口、呼吸异常或低体温。"
+              ],
+              why: "因为现实情况不总是“马上救走”或“完全不动”二选一，网页需要为“环境危险但仍可能有母猫”提供中间路径。"
+            }
+          }
+        },
+        age: {
+          title: "Quick Age Check 幼猫年龄速查",
+          subtitle: "这是一个轻量判断器，不是医学诊断。目的是帮助你决定“下一步最安全的护理方向”。",
+          fields: {
+            eyes: "眼睛",
+            ears: "耳朵",
+            movement: "行动能力",
+            teeth: "牙齿"
+          },
+          placeholders: {
+            eyes: "请选择眼睛状态",
+            ears: "请选择耳朵状态",
+            movement: "请选择行动状态",
+            teeth: "请选择牙齿状态"
+          },
+          options: {
+            eyes: [
+              ["closed", "仍闭着"],
+              ["open", "已经睁开"]
+            ],
+            ears: [
+              ["folded", "仍较贴头 / 未完全立起"],
+              ["upright", "已经立起"]
+            ],
+            movement: [
+              ["crawling", "主要爬行 / 很不稳"],
+              ["walking", "能够摇晃走动"]
+            ],
+            teeth: [
+              ["none", "看不到牙"],
+              ["some", "有一些小牙"],
+              ["many", "已经有比较明显的乳牙"]
+            ]
+          },
+          empty: "完成上面的选择后，这里会显示一个大致年龄范围和护理提醒。",
+          results: {
+            a: {
+              badge: "约 0–1 周",
+              title: "刚出生到很小",
+              body: "优先保暖。若仍在现场且母猫可能回来，不要急着带走。任何喂养决策都应非常谨慎，尤其不要喂牛奶。"
+            },
+            b: {
+              badge: "约 1–2 周",
+              title: "眼睛打开但仍非常脆弱",
+              body: "保暖仍是优先项。若没有母猫照顾，需要更细致的护理与频繁观察。"
+            },
+            c: {
+              badge: "约 2–4 周",
+              title: "开始更明显活动",
+              body: "可能已经开始探索环境，但仍需要稳定保暖与更合适的喂养方式判断。"
+            },
+            d: {
+              badge: "约 4–8 周",
+              title: "可活动、可能逐步过渡食物",
+              body: "可进一步评估是否能吃幼猫湿粮 / 奶糕，但仍要先确认体温、精神和整体状态。"
+            }
+          },
+          actions: {
+            help: "用这个估龄结果生成求助文案",
+            summary: "把估龄结果写入摘要"
+          }
+        },
+        help: {
+          title: "如何在线求助",
+          subtitle: "把现场观察自动整理成一段更完整的求助文案，便于发到社群、给志愿者或医院看。",
+          labels: {
+            area: "大致地点",
+            count: "幼猫数量",
+            mother: "是否看见母猫",
+            injury: "伤病状况",
+            action: "当前处理",
+            notes: "补充说明",
+            contact: "联系方式（可选）"
+          },
+          placeholders: {
+            area: "例如：某小区附近 / 某街区停车场",
+            count: "例如：1",
+            notes: "例如：有照片、天气下雨、在车底发现、已保暖 20 分钟……",
+            contact: "例如：可私讯我 / 电话方式"
+          },
+          options: {
+            mother: {
+              yes: "看见过 / 很可能在附近",
+              no: "没看见",
+              unknown: "不确定"
+            },
+            injury: {
+              ok: "暂无明显伤口",
+              weak: "虚弱 / 冰冷 / 状态差",
+              hurt: "明显受伤 / 呼吸异常"
+            },
+            action: {
+              watching: "正在原地观察",
+              warming: "正在保暖",
+              moving: "准备转送 / 就医"
+            }
+          },
+          previewTitle: "可复制文案",
+          copy: "复制文案",
+          copied: "求助文案已复制",
+          empty: "填写上方内容后，这里会自动生成求助文案。",
+          autofill: "已自动结合你前面流程中的现场记录与建议结果。"
+        },
+        resources: {
+          title: "资源库",
+          subtitle: "按任务查找，而不是按来源查找。更符合紧急情境中的使用逻辑。",
+          cards: [
+            {
+              icon: "🧭",
+              title: "第一反应",
+              body: "先观察、先判断环境风险、避免立刻抱走。",
+              items: [
+                "发现幼猫后的前 30 分钟要做什么",
+                "什么情况下应该先退后观察",
+                "如何降低对母猫的干扰"
+              ]
+            },
+            {
+              icon: "🔥",
+              title: "保暖与稳定",
+              body: "低体温是高风险点，网页要先把用户带到保暖逻辑。",
+              items: [
+                "如何搭一个简易保暖窝",
+                "为什么先保暖再决定喂食",
+                "常见误区：牛奶、洗澡、频繁挪动"
+              ]
+            },
+            {
+              icon: "🍽️",
+              title: "喂养基础",
+              body: "只有在体温相对稳定后，喂养问题才值得进入下一步。",
+              items: [
+                "估龄与喂食方式的关系",
+                "何时可能过渡到幼猫粮",
+                "需要进一步请教专业人士的情形"
+              ]
+            },
+            {
+              icon: "🤝",
+              title: "求助与转运",
+              body: "把观察结果转成标准化信息，更容易获得有效帮助。",
+              items: [
+                "如何写一条高质量求助帖",
+                "给志愿者 / 医院看的摘要应包含哪些内容",
+                "安全转运的基本方式"
+              ]
+            }
+          ]
+        },
+        summary: {
+          title: "Case Summary 现场摘要",
+          subtitle: "把前面流程中的关键信息收束为一张摘要卡，便于你继续处理或转发。",
+          labels: {
+            started: "开始观察时间",
+            result: "当前建议",
+            q0: "环境是否危险",
+            q1: "母猫是否在附近",
+            q2: "是否有严重异常",
+            q3: "是否触感冰凉",
+            timer: "观察倒计时",
+            age: "估龄结果"
+          },
+          answerMap: {
+            yes: "是",
+            no: "否",
+            unsure: "不确定",
+            empty: "尚未回答"
+          },
+          timerNone: "未启动",
+          copy: "复制摘要",
+          copied: "摘要已复制",
+          restart: "重新开始流程",
+          noResult: "你还没有完成决策路径。可以先从首页开始，或直接打开“开始判断”。"
+        },
+        common: {
+          demoNote: "这是一个交互网页原型：重点在信息结构与流程体验，不包含真实定位与后端服务。",
+          copyOk: "已复制到剪贴板",
+          restart: "重新开始",
+          home: "回到首页"
+        }
+      },
+      en: {
+        brandSub: "A digital first-response tool for novice rescuers",
+        nav: {
+          home: "Home",
+          start: "Start",
+          age: "Age",
+          help: "Help",
+          summary: "Summary"
+        },
+        home: {
+          eyebrow: "Low-friction · Field-ready · Mobile-first",
+          title: "Found a stray kitten? Start with calm observation.",
+          lead: "This interactive webpage turns the earlier Figma concept into a clickable web flow. It guides users through: observe first, decide next, act safely, then ask for help.",
+          primary: "Found a stray kitten? Start here",
+          emergency: "Emergency signs? Get urgent help",
+          chips: [
+            "First-pass guidance in about 2 minutes",
+            "One decision at a time",
+            "Does not replace veterinary care"
+          ],
+          cards: [
+            {
+              icon: "🔎",
+              title: "Quick Age Check",
+              body: "Use eyes, ears, movement and teeth for a rough age estimate that supports care decisions.",
+              action: "Open age tool",
+              click: "goScreen('age')"
+            },
+            {
+              icon: "🆘",
+              title: "How to Ask for Help",
+              body: "Turn field notes into a copy-ready help request for volunteers, communities or clinics.",
+              action: "Open help template",
+              click: "goScreen('help')"
+            },
+            {
+              icon: "📚",
+              title: "Resources",
+              body: "Browse by task: first response, warming, feeding basics, transport and trusted learning.",
+              action: "Open resources",
+              click: "goScreen('resources')"
+            }
+          ],
+          trust: [
+            "Made for first-time rescuers",
+            "Helps you do the next step instead of reading long text",
+            "Includes an unsure option to reduce pressure"
+          ]
+        },
+        first30: {
+          title: "The First 30 Minutes",
+          subtitle: "Lower panic first. Then make decisions one step at a time.",
+          prev: "Previous",
+          next: "Next",
+          done: "I’ve finished the first observation. Start the decision tool",
+          steps: [
+            {
+              icon: "🫶",
+              title: "Pause before you pick the kitten up",
+              body: "You do not need to know everything immediately. Start with the safest possible observation.",
+              tip: "Goal: turn urgency into a calmer rhythm of checking before acting."
+            },
+            {
+              icon: "↔️",
+              title: "Keep your distance",
+              body: "Stay about 5–10 meters away and reduce noise or crowding so the mother cat feels safer returning.",
+              tip: "Too many people nearby can keep the mother away."
+            },
+            {
+              icon: "⏳",
+              title: "Wait and watch",
+              body: "Do not touch or remove the kitten right away. The mother may simply be away temporarily.",
+              tip: "Not seeing the mother immediately does not prove abandonment."
+            },
+            {
+              icon: "📷",
+              title: "Document the scene",
+              body: "Take photos, note the location, time, weather and whether the mother was seen.",
+              tip: "These notes help later if you need online help or veterinary guidance."
+            },
+            {
+              icon: "🛡️",
+              title: "Deal with environmental danger first",
+              body: "If the kitten is near traffic, dogs, drains or severe weather, move it only a short distance to a nearby safer spot.",
+              tip: "Keep the move short so the mother can still find the kitten."
+            }
+          ]
+        },
+        decision: {
+          title: "Interactive Decision Tool",
+          subtitle: "One screen, one question. Every step includes an “unsure” option.",
+          stepLabel: "Question",
+          buttons: {
+            yes: "Yes",
+            no: "No",
+            unsure: "Not sure",
+            restart: "Restart",
+            back: "Back"
+          },
+          qHelpLabel: "How do I check?",
+          questions: [
+            {
+              id: "q0",
+              label: "Environmental risk",
+              title: "Is the kitten in immediate danger where it is now?",
+              help: "For example: traffic, exposed heat or rain, a drain opening, dogs, or heavy foot traffic.",
+              detail: "First ask whether the environment itself could harm the kitten right away. If yes, handle that risk before continuing."
+            },
+            {
+              id: "q1",
+              label: "Mother cat",
+              title: "Is the mother cat nearby?",
+              help: "Choose yes if you saw the mother return, circle nearby, or show signs of nursing.",
+              detail: "The mother may not approach while humans are too close, so distance helps produce a better judgment."
+            },
+            {
+              id: "q2",
+              label: "Body condition",
+              title: "Does the kitten show injury, breathing trouble, extreme weakness, or ongoing distressed crying?",
+              help: "This question is mainly about identifying cases that should be escalated quickly.",
+              detail: "No visible wound does not always mean the kitten is okay. Weak responsiveness or labored breathing are warning signs."
+            },
+            {
+              id: "q3",
+              label: "Body temperature",
+              title: "Does the kitten feel cold to the touch?",
+              help: "If it feels cold, warm first and do not rush to feed.",
+              detail: "A cold kitten may not be ready for feeding. Stabilizing temperature comes first."
+            }
+          ]
+        },
+        modals: {
+          q2Title: "Not sure whether the kitten is injured?",
+          q2Body: "When it is hard to tell in the field, a more cautious route is usually safer. You can jump to urgent care or continue one more question.",
+          q2Urgent: "Go to urgent care",
+          q2Continue: "Continue",
+          q3Title: "Warm first. Do not feed yet.",
+          q3Body: "If the kitten feels cold, warming comes before feeding or more complex handling. This flow will take you to the warming and initial care page.",
+          q3Confirm: "Got it"
+        },
+        result: {
+          sectionTitle: "Comprehensive Result Pages",
+          sectionSub: "This is not the end of reading. It is the start of action.",
+          tools: "Helpful tools",
+          now: "Do this now",
+          avoid: "Avoid this for now",
+          escalate: "When to escalate",
+          why: "Why this advice?",
+          whyLabel: "Open explanation",
+          goAge: "Open age tool",
+          goHelp: "Generate help text",
+          goSummary: "View case summary",
+          backHome: "Back to Home",
+          timerTitle: "Observation timer",
+          timerSub: "A lightweight timer for the wait-and-watch path.",
+          timer30: "30 min",
+          timer120: "2 hr",
+          timer240: "4 hr",
+          timerIdle: "Timer not started",
+          timerActive: "Time remaining",
+          timerEnded: "Time is up. Reassess now.",
+          clinicTitle: "24-hour clinic finder (prototype placeholder)",
+          clinicSub: "A production version could connect to a maps API. This prototype focuses on structure and interaction, not real search results.",
+          clinicButton: "Simulate nearby 24h clinic finder",
+          clinicHint: "Example: show clinic cards, distance, open status and navigation entry point here.",
+          summaryButton: "Copy summary",
+          definitions: {
+            A: {
+              pill: "Advice A",
+              pillTone: "info",
+              title: "Wait & Watch",
+              intro: "The best next step is usually calm observation from a distance instead of immediate removal.",
+              now: [
+                "Start an observation timer: 30 minutes, 2 hours or 4 hours.",
+                "Keep the area quiet and reduce repeated checking.",
+                "Keep logging whether the mother returns, nurses, or whether the kitten grows colder or weaker."
+              ],
+              avoid: [
+                "Do not remove the kitten right away out of panic.",
+                "Do not interrupt possible mother-cat return by staying too close.",
+                "Do not post an overly precise public location."
+              ],
+              escalate: [
+                "The observation window ends and the mother has still not returned.",
+                "The kitten grows colder, weaker or the environment becomes dangerous.",
+                "You notice wounds, breathing trouble or severe weakness."
+              ],
+              why: "When the mother is likely nearby, careful observation is often safer than immediate intervention. The interface should reduce overreaction, not push it."
+            },
+            B: {
+              pill: "Advice B",
+              pillTone: "warn",
+              title: "Warming & Initial Care",
+              intro: "If the kitten feels cold and does not show obvious severe trauma, the priority is warming and stabilization, not feeding first.",
+              now: [
+                "Create a simple warm nest with a box, towel and wrapped heat source.",
+                "Leave one side warmer and one side cooler to avoid overheating.",
+                "Warm first, then decide whether feeding or more support is needed."
+              ],
+              avoid: [
+                "Do not give cow milk.",
+                "Do not feed a cold kitten.",
+                "Do not rush into bathing or extended exposure."
+              ],
+              escalate: [
+                "The kitten remains weak, unresponsive or has breathing trouble after warming.",
+                "You see parasites, wounds or ongoing distress.",
+                "You cannot judge the age or care needs confidently."
+              ],
+              why: "Low body temperature can make feeding unsafe. The interface should redirect the user's instinct from “feed something now” to “warm first.”"
+            },
+            C: {
+              pill: "Advice C",
+              pillTone: "danger",
+              title: "Emergency Medical Care",
+              intro: "If the kitten has obvious injury, breathing difficulty or extreme weakness, seek veterinary help as soon as possible.",
+              now: [
+                "Keep the kitten quiet and as warm as possible.",
+                "Place it in a secure box lined with towels.",
+                "Go to a veterinary clinic or contact a qualified rescue or medical resource."
+              ],
+              avoid: [
+                "Do not keep taking the kitten out to check repeatedly.",
+                "Do not try multiple complex interventions while moving.",
+                "Do not delay too long because of uncertainty."
+              ],
+              escalate: [
+                "This already represents the highest-priority path.",
+                "If the condition worsens during transport, describe the symptoms when calling ahead.",
+                "Keep the ride warm and calm."
+              ],
+              why: "These signs mean the interface should stop encouraging more browsing and switch fully into execution mode."
+            },
+            D: {
+              pill: "Advice D",
+              pillTone: "success",
+              title: "Move to a nearby safer spot, then monitor",
+              intro: "If the environment is immediately dangerous, move the kitten only a short distance to safety, then continue watching for the mother.",
+              now: [
+                "Move only to a nearby safer place, not far away.",
+                "Continue waiting and watching from the new safe spot.",
+                "Log the new location, time and whether the mother can still find the kitten."
+              ],
+              avoid: [
+                "Do not turn environmental danger into a full long-distance removal by default.",
+                "Do not place the kitten somewhere exposed or too hot or cold.",
+                "Do not forget to keep monitoring for the mother."
+              ],
+              escalate: [
+                "The mother does not return and the kitten weakens.",
+                "The environment becomes dangerous again.",
+                "You find injury, breathing trouble or low body temperature."
+              ],
+              why: "Real rescue scenes are not always binary. The interface needs a middle path for “unsafe spot, but mother may still be present.”"
+            }
+          }
+        },
+        age: {
+          title: "Quick Age Check",
+          subtitle: "This is a lightweight estimator, not a diagnosis. Its purpose is to guide a safer next step.",
+          fields: {
+            eyes: "Eyes",
+            ears: "Ears",
+            movement: "Movement",
+            teeth: "Teeth"
+          },
+          placeholders: {
+            eyes: "Select eye state",
+            ears: "Select ear state",
+            movement: "Select movement state",
+            teeth: "Select teeth state"
+          },
+          options: {
+            eyes: [
+              ["closed", "Still closed"],
+              ["open", "Open"]
+            ],
+            ears: [
+              ["folded", "Folded / not fully upright"],
+              ["upright", "Upright"]
+            ],
+            movement: [
+              ["crawling", "Mostly crawling / unstable"],
+              ["walking", "Able to wobble-walk"]
+            ],
+            teeth: [
+              ["none", "No visible teeth"],
+              ["some", "Some tiny teeth"],
+              ["many", "More obvious baby teeth"]
+            ]
+          },
+          empty: "Choose the traits above to see a rough age range and a care reminder.",
+          results: {
+            a: {
+              badge: "About 0–1 week",
+              title: "Very young / newborn stage",
+              body: "Warmth is the priority. If the mother may still return, avoid unnecessary removal. Any feeding decision should be cautious, and never start with cow milk."
+            },
+            b: {
+              badge: "About 1–2 weeks",
+              title: "Eyes open but still fragile",
+              body: "Warming remains important. Without mother-cat care, the kitten may need closer support and frequent monitoring."
+            },
+            c: {
+              badge: "About 2–4 weeks",
+              title: "More active but still vulnerable",
+              body: "The kitten may explore more, but safe warming and appropriate feeding guidance still matter."
+            },
+            d: {
+              badge: "About 4–8 weeks",
+              title: "Mobile and beginning food transition",
+              body: "You can assess whether kitten food transition may be appropriate, but first confirm warmth, alertness and overall condition."
+            }
+          },
+          actions: {
+            help: "Use this estimate in a help request",
+            summary: "Write age estimate into summary"
+          }
+        },
+        help: {
+          title: "How to Ask for Help",
+          subtitle: "Turn field notes into a cleaner help request for communities, rescuers or clinics.",
+          labels: {
+            area: "General area",
+            count: "Number of kittens",
+            mother: "Mother cat seen?",
+            injury: "Condition",
+            action: "Current action",
+            notes: "Extra notes",
+            contact: "Contact (optional)"
+          },
+          placeholders: {
+            area: "Example: near a housing complex / in a parking lot",
+            count: "Example: 1",
+            notes: "Example: photos available, found under a car, raining, warmed for 20 minutes…",
+            contact: "Example: please DM me / phone"
+          },
+          options: {
+            mother: {
+              yes: "Seen / likely nearby",
+              no: "Not seen",
+              unknown: "Not sure"
+            },
+            injury: {
+              ok: "No obvious injury",
+              weak: "Weak / cold / poor condition",
+              hurt: "Obvious injury / breathing trouble"
+            },
+            action: {
+              watching: "Watching from a distance",
+              warming: "Warming now",
+              moving: "Preparing transport / clinic"
+            }
+          },
+          previewTitle: "Copy-ready help text",
+          copy: "Copy text",
+          copied: "Help text copied",
+          empty: "Fill the form above and a help request draft will appear here.",
+          autofill: "This template automatically includes observations and the current recommendation from your earlier flow."
+        },
+        resources: {
+          title: "Resources",
+          subtitle: "Organized by task rather than by source, which fits urgent use cases better.",
+          cards: [
+            {
+              icon: "🧭",
+              title: "First response",
+              body: "Observe first, check environmental danger, and avoid removing the kitten too early.",
+              items: [
+                "What to do in the first 30 minutes",
+                "When distance is better than intervention",
+                "How to avoid disrupting the mother cat"
+              ]
+            },
+            {
+              icon: "🔥",
+              title: "Warming & stabilization",
+              body: "Low body temperature is a major risk, so the interface should surface this quickly.",
+              items: [
+                "How to build a simple warm nest",
+                "Why warming comes before feeding",
+                "Common mistakes: cow milk, bathing, frequent moving"
+              ]
+            },
+            {
+              icon: "🍽️",
+              title: "Feeding basics",
+              body: "Feeding is only worth deciding after temperature and general stability are better understood.",
+              items: [
+                "How age estimate relates to feeding choices",
+                "When a transition toward kitten food may be possible",
+                "When to ask a professional before acting"
+              ]
+            },
+            {
+              icon: "🤝",
+              title: "Help & transport",
+              body: "Standardized field notes make it easier for others to give useful help.",
+              items: [
+                "How to write a high-quality help post",
+                "What a volunteer or clinic summary should include",
+                "Basic safe transport practice"
+              ]
+            }
+          ]
+        },
+        summary: {
+          title: "Case Summary",
+          subtitle: "Pull the key information from the flow into one shareable card.",
+          labels: {
+            started: "Observation started",
+            result: "Current recommendation",
+            q0: "Environment dangerous?",
+            q1: "Mother nearby?",
+            q2: "Serious symptoms?",
+            q3: "Cold to touch?",
+            timer: "Observation timer",
+            age: "Age estimate"
+          },
+          answerMap: {
+            yes: "Yes",
+            no: "No",
+            unsure: "Not sure",
+            empty: "Not answered"
+          },
+          timerNone: "Not started",
+          copy: "Copy summary",
+          copied: "Summary copied",
+          restart: "Restart flow",
+          noResult: "You have not completed a decision path yet. Start from Home or jump into the decision flow."
+        },
+        common: {
+          demoNote: "This is an interactive web prototype focused on structure and flow. It does not include real maps or backend services.",
+          copyOk: "Copied to clipboard",
+          restart: "Restart",
+          home: "Home"
+        }
+      }
+    };
+
+    const state = {
+      lang: "cn",
+      screen: "home",
+      stepIndex: 0,
+      currentQuestion: 0,
+      answers: { q0: null, q1: null, q2: null, q3: null },
+      result: null,
+      observationStart: null,
+      observationTimer: null,
+      clinicFinderShown: false,
+      age: { eyes: "", ears: "", movement: "", teeth: "", estimateKey: null },
+      help: {
+        area: "",
+        count: "1",
+        mother: "unknown",
+        injury: "ok",
+        action: "watching",
+        notes: "",
+        contact: ""
+      }
+    };
+
+    const questionIds = ["q0", "q1", "q2", "q3"];
+
+    function t(path){
+      const parts = path.split(".");
+      let cur = content[state.lang];
+      for(const p of parts){
+        if(cur == null) return "";
+        cur = cur[p];
+      }
+      return cur;
+    }
+
+    function e(str){
+      return String(str ?? "").replace(/[&<>"']/g, (m) => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[m]));
+    }
+
+    function formatDateTime(date){
+      if(!date) return "—";
+      try{
+        return new Intl.DateTimeFormat(state.lang === "cn" ? "zh-Hans-CN" : "en-US", {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        }).format(date);
+      }catch(_){
+        return date.toLocaleString();
+      }
+    }
+
+    function goScreen(screen){
+      state.screen = screen;
+      render();
+    }
+
+    function setLang(lang){
+      state.lang = lang;
+      document.documentElement.lang = lang === "cn" ? "zh-Hans" : "en";
+      document.getElementById("langCn").classList.toggle("active", lang === "cn");
+      document.getElementById("langEn").classList.toggle("active", lang === "en");
+      render();
+    }
+
+    function startFlow(){
+      if(!state.observationStart) state.observationStart = new Date();
+      state.stepIndex = 0;
+      state.screen = "first30";
+      render();
+    }
+
+    function emergencyRoute(){
+      if(!state.observationStart) state.observationStart = new Date();
+      state.result = "C";
+      state.screen = "result";
+      render();
+    }
+
+    function startDecision(){
+      if(!state.observationStart) state.observationStart = new Date();
+      state.currentQuestion = 0;
+      state.screen = "decision";
+      render();
+    }
+
+    function resetFlow(){
+      state.stepIndex = 0;
+      state.currentQuestion = 0;
+      state.answers = { q0: null, q1: null, q2: null, q3: null };
+      state.result = null;
+      state.observationStart = null;
+      state.observationTimer = null;
+      state.clinicFinderShown = false;
+      state.screen = "home";
+      render();
+    }
+
+    function nextStep(){
+      const max = t("first30.steps").length - 1;
+      state.stepIndex = Math.min(max, state.stepIndex + 1);
+      render();
+    }
+
+    function prevStep(){
+      state.stepIndex = Math.max(0, state.stepIndex - 1);
+      render();
+    }
+
+    function backQuestion(){
+      if(state.currentQuestion > 0){
+        state.currentQuestion -= 1;
+      }else{
+        state.screen = "first30";
+      }
+      render();
+    }
+
+    function chooseAnswer(value){
+      const qid = questionIds[state.currentQuestion];
+      state.answers[qid] = value;
+
+      if(qid === "q0"){
+        if(value === "yes"){
+          state.result = "D";
+          state.screen = "result";
+        }else{
+          state.currentQuestion = 1;
+        }
+        render();
+        return;
+      }
+
+      if(qid === "q1"){
+        if(value === "yes"){
+          state.result = "A";
+          state.screen = "result";
+        }else{
+          state.currentQuestion = 2;
+        }
+        render();
+        return;
+      }
+
+      if(qid === "q2"){
+        if(value === "yes"){
+          state.result = "C";
+          state.screen = "result";
+          render();
+          return;
+        }
+        if(value === "unsure"){
+          openModal(
+            t("modals.q2Title"),
+            t("modals.q2Body"),
+            [
+              { label: t("modals.q2Urgent"), cls: "btn-danger", action: () => { closeModal(); state.result = "C"; state.screen = "result"; render(); } },
+              { label: t("modals.q2Continue"), cls: "btn-secondary", action: () => { closeModal(); state.currentQuestion = 3; render(); } }
+            ]
+          );
+          return;
+        }
+        state.currentQuestion = 3;
+        render();
+        return;
+      }
+
+      if(qid === "q3"){
+        if(value === "yes"){
+          openModal(
+            t("modals.q3Title"),
+            t("modals.q3Body"),
+            [
+              { label: t("modals.q3Confirm"), cls: "btn-primary", action: () => { closeModal(); state.result = "B"; state.screen = "result"; render(); } }
+            ]
+          );
+          return;
+        }
+        state.result = "B";
+        state.screen = "result";
+        render();
+      }
+    }
+
+    function openModal(title, body, actions){
+      document.getElementById("modalTitle").textContent = title;
+      document.getElementById("modalBody").textContent = body;
+      const wrap = document.getElementById("modalActions");
+      wrap.innerHTML = actions.map((a, i) => `
+        <button class="btn ${a.cls}" data-modal-idx="${i}">${e(a.label)}</button>
+      `).join("");
+      wrap.querySelectorAll("[data-modal-idx]").forEach((btn) => {
+        btn.addEventListener("click", () => actions[Number(btn.dataset.modalIdx)].action());
+      });
+      document.getElementById("modal").classList.add("show");
+    }
+
+    function closeModal(){
+      document.getElementById("modal").classList.remove("show");
+    }
+
+    function startTimer(mins){
+      state.observationTimer = { start: Date.now(), durationMs: mins * 60 * 1000, mins };
+      render();
+    }
+
+    function getTimerStatus(){
+      if(!state.observationTimer) return { label: t("result.timerIdle"), done: false };
+      const end = state.observationTimer.start + state.observationTimer.durationMs;
+      const remaining = end - Date.now();
+      if(remaining <= 0){
+        return { label: t("result.timerEnded"), done: true, remaining: 0 };
+      }
+      const totalSec = Math.floor(remaining / 1000);
+      const hh = Math.floor(totalSec / 3600);
+      const mm = Math.floor((totalSec % 3600) / 60);
+      const ss = totalSec % 60;
+      const text = [hh, mm, ss]
+        .filter((v, idx) => v > 0 || idx > 0)
+        .map(v => String(v).padStart(2, "0"))
+        .join(":");
+      return { label: t("result.timerActive"), done: false, remaining, text };
+    }
+
+    function updateTimerDisplays(){
+      const status = getTimerStatus();
+      const ids = ["timerDisplay", "summaryTimerValue"];
+      ids.forEach((id) => {
+        const el = document.getElementById(id);
+        if(!el) return;
+        if(state.observationTimer){
+          el.textContent = status.done ? status.label : `${status.label} · ${status.text}`;
+        }else{
+          el.textContent = status.label;
+        }
+      });
+    }
+
+    function getAgeEstimate(){
+      const a = state.age;
+      if(!a.eyes || !a.ears || !a.movement || !a.teeth) return null;
+      if(a.eyes === "closed") return "a";
+      if(a.eyes === "open" && a.ears === "folded") return "b";
+      if(a.movement === "crawling" && (a.teeth === "none" || a.teeth === "some")) return "c";
+      if(a.movement === "walking" || a.teeth === "many") return "d";
+      return "c";
+    }
+
+    function updateAge(field, value){
+      state.age[field] = value;
+      const estimate = getAgeEstimate();
+      state.age.estimateKey = estimate;
+      renderAgeResultOnly();
+    }
+
+    function updateHelpField(field, value){
+      state.help[field] = value;
+      updateHelpPreviewOnly();
+    }
+
+    function answerText(key){
+      return key ? t(`summary.answerMap.${key}`) : t("summary.answerMap.empty");
+    }
+
+    function currentResultDefinition(){
+      if(!state.result) return null;
+      return t(`result.definitions.${state.result}`);
+    }
+
+    function currentResultTitle(){
+      const def = currentResultDefinition();
+      return def ? def.title : "—";
+    }
+
+    function getSummaryText(){
+      const ageEstimate = state.age.estimateKey ? t(`age.results.${state.age.estimateKey}.badge`) : "—";
+      const timerState = state.observationTimer ? (getTimerStatus().done ? t("result.timerEnded") : getTimerStatus().text) : t("summary.timerNone");
+      return [
+        `Paws & Proof`,
+        `${t("summary.labels.started")}: ${formatDateTime(state.observationStart)}`,
+        `${t("summary.labels.result")}: ${currentResultTitle()}`,
+        `${t("summary.labels.q0")}: ${answerText(state.answers.q0)}`,
+        `${t("summary.labels.q1")}: ${answerText(state.answers.q1)}`,
+        `${t("summary.labels.q2")}: ${answerText(state.answers.q2)}`,
+        `${t("summary.labels.q3")}: ${answerText(state.answers.q3)}`,
+        `${t("summary.labels.timer")}: ${timerState}`,
+        `${t("summary.labels.age")}: ${ageEstimate}`
+      ].join("\n");
+    }
+
+    function getHelpText(){
+      const motherMap = t("help.options.mother");
+      const injuryMap = t("help.options.injury");
+      const actionMap = t("help.options.action");
+      const lines = [];
+      if(state.lang === "cn"){
+        lines.push("【幼猫求助】");
+        lines.push(`地点：${state.help.area || "（待补充）"}`);
+        lines.push(`数量：${state.help.count || "1"}`);
+        lines.push(`母猫情况：${motherMap[state.help.mother]}`);
+        lines.push(`状态：${injuryMap[state.help.injury]}`);
+        lines.push(`当前处理：${actionMap[state.help.action]}`);
+        if(state.result) lines.push(`当前建议：${currentResultTitle()}`);
+        if(state.observationStart) lines.push(`开始观察：${formatDateTime(state.observationStart)}`);
+        if(state.age.estimateKey) lines.push(`估龄参考：${t(`age.results.${state.age.estimateKey}.badge`)}`);
+        if(state.help.notes) lines.push(`补充：${state.help.notes}`);
+        if(state.help.contact) lines.push(`联系方式：${state.help.contact}`);
+        lines.push("有照片 / 更详细信息可私讯。谢谢。");
+      }else{
+        lines.push("[Kitten Help Request]");
+        lines.push(`Area: ${state.help.area || "(to be added)"}`);
+        lines.push(`Number of kittens: ${state.help.count || "1"}`);
+        lines.push(`Mother cat: ${motherMap[state.help.mother]}`);
+        lines.push(`Condition: ${injuryMap[state.help.injury]}`);
+        lines.push(`Current action: ${actionMap[state.help.action]}`);
+        if(state.result) lines.push(`Current recommendation: ${currentResultTitle()}`);
+        if(state.observationStart) lines.push(`Observation started: ${formatDateTime(state.observationStart)}`);
+        if(state.age.estimateKey) lines.push(`Age estimate: ${t(`age.results.${state.age.estimateKey}.badge`)}`);
+        if(state.help.notes) lines.push(`Extra notes: ${state.help.notes}`);
+        if(state.help.contact) lines.push(`Contact: ${state.help.contact}`);
+        lines.push("Photos and more details are available. Thank you.");
+      }
+      return lines.join("\n");
+    }
+
+    async function copyText(text, success){
+      try{
+        if(navigator.clipboard && window.isSecureContext){
+          await navigator.clipboard.writeText(text);
+        }else{
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          document.execCommand("copy");
+          ta.remove();
+        }
+        showToast(success || t("common.copyOk"));
+      }catch(err){
+        showToast(t("common.copyOk"));
+      }
+    }
+
+    function showToast(msg){
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => toast.classList.remove("show"), 1700);
+    }
+
+    function renderBottomNav(){
+      const items = [
+        { id: "home", icon: "🏠", label: t("nav.home"), click: "goScreen('home')" },
+        { id: "first30", icon: "🚦", label: t("nav.start"), click: "startFlow()" },
+        { id: "age", icon: "📏", label: t("nav.age"), click: "goScreen('age')" },
+        { id: "help", icon: "🆘", label: t("nav.help"), click: "goScreen('help')" },
+        { id: "summary", icon: "🧾", label: t("nav.summary"), click: "goScreen('summary')" }
+      ];
+      document.getElementById("bottomNav").innerHTML = items.map((item) => `
+        <button class="nav-btn ${navActive(item.id) ? "active" : ""}" onclick="${item.click}">
+          <span class="icon">${item.icon}</span>
+          <span>${e(item.label)}</span>
+        </button>
+      `).join("");
+    }
+
+    function navActive(id){
+      if(id === "first30") return state.screen === "first30" || state.screen === "decision" || state.screen === "result";
+      return state.screen === id;
+    }
+
+    function renderHome(){
+      const d = t("home");
+      return `
+        <div class="panel hero">
+          <div class="eyebrow">✨ ${e(d.eyebrow)}</div>
+          <h1>${e(d.title)}</h1>
+          <p class="lead">${e(d.lead)}</p>
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="startFlow()">🐾 ${e(d.primary)}</button>
+            <button class="btn btn-danger" onclick="emergencyRoute()">⚠️ ${e(d.emergency)}</button>
+          </div>
+          <div class="chip-row">
+            ${d.chips.map(c => `<div class="chip">${e(c)}</div>`).join("")}
+          </div>
+        </div>
+
+        <div class="grid">
+          ${d.cards.map(card => `
+            <div class="mini-card">
+              <h3>${card.icon} ${e(card.title)}</h3>
+              <p>${e(card.body)}</p>
+              <div class="btn-row">
+                <button class="btn btn-secondary" onclick="${card.click}">${e(card.action)}</button>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+
+        <div class="panel">
+          <div class="section-title">
+            <div>
+              <h2>Paws &amp; Proof</h2>
+              <p>${e(t("common.demoNote"))}</p>
+            </div>
+          </div>
+          <div class="trust-row">
+            ${d.trust.map(item => `<div class="trust">• ${e(item)}</div>`).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFirst30(){
+      const d = t("first30");
+      const steps = d.steps;
+      const step = steps[state.stepIndex];
+      return `
+        <div class="panel">
+          <div class="section-title">
+            <div>
+              <h2>${e(d.title)}</h2>
+              <p>${e(d.subtitle)}</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div>
+              <div class="step-index">${state.stepIndex + 1} / ${steps.length}</div>
+              <div class="step-icon">${step.icon}</div>
+              <h3>${e(step.title)}</h3>
+              <p>${e(step.body)}</p>
+              <div class="tip">💡 ${e(step.tip)}</div>
+            </div>
+            <div>
+              <div class="dot-row">
+                ${steps.map((_, idx) => `<span class="dot ${idx === state.stepIndex ? "active" : ""}"></span>`).join("")}
+              </div>
+              <div class="nav-inline">
+                <button class="btn btn-secondary" onclick="prevStep()" ${state.stepIndex === 0 ? "disabled style='opacity:.45;pointer-events:none'" : ""}>${e(d.prev)}</button>
+                <button class="btn btn-soft" onclick="nextStep()" ${state.stepIndex === steps.length - 1 ? "disabled style='opacity:.45;pointer-events:none'" : ""}>${e(d.next)}</button>
+              </div>
+              <div class="btn-row">
+                <button class="btn btn-primary btn-block" onclick="startDecision()">${e(d.done)}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDecision(){
+      const d = t("decision");
+      const q = d.questions[state.currentQuestion];
+      const pct = ((state.currentQuestion + 1) / d.questions.length) * 100;
+      return `
+        <div class="panel">
+          <div class="section-title">
+            <div>
+              <h2>${e(d.title)}</h2>
+              <p>${e(d.subtitle)}</p>
+            </div>
+            <button class="btn btn-secondary" onclick="resetFlow()">${e(d.buttons.restart)}</button>
+          </div>
+
+          <div class="progress-wrap">
+            <div class="progress-head">
+              <h3>${e(d.stepLabel)} ${state.currentQuestion + 1} / ${d.questions.length}</h3>
+              <button class="btn btn-ghost" onclick="backQuestion()">${e(d.buttons.back)}</button>
+            </div>
+            <div class="progress"><span style="width:${pct}%"></span></div>
+          </div>
+
+          <div class="question-card">
+            <div class="question-tag">✳️ ${e(q.label)}</div>
+            <h2>${e(q.title)}</h2>
+            <p class="question-help">${e(q.help)}</p>
+
+            <div class="answer-grid">
+              <button class="answer-btn" onclick="chooseAnswer('yes')">✅ ${e(d.buttons.yes)}</button>
+              <button class="answer-btn" onclick="chooseAnswer('no')">➖ ${e(d.buttons.no)}</button>
+              <button class="answer-btn" onclick="chooseAnswer('unsure')">❔ ${e(d.buttons.unsure)}</button>
+            </div>
+
+            <details>
+              <summary>${e(d.qHelpLabel)} <span>＋</span></summary>
+              <p>${e(q.detail)}</p>
+            </details>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTimerTool(){
+      const status = getTimerStatus();
+      return `
+        <div class="tool-card">
+          <h3>⏱️ ${e(t("result.timerTitle"))}</h3>
+          <p>${e(t("result.timerSub"))}</p>
+          <div class="tool-actions">
+            <button class="btn btn-secondary" onclick="startTimer(30)">${e(t("result.timer30"))}</button>
+            <button class="btn btn-secondary" onclick="startTimer(120)">${e(t("result.timer120"))}</button>
+            <button class="btn btn-secondary" onclick="startTimer(240)">${e(t("result.timer240"))}</button>
+          </div>
+          <div class="timer-box">
+            <div class="small muted">${e(status.label)}</div>
+            <div class="timer-display" id="timerDisplay">${state.observationTimer ? (status.done ? status.label : `${status.label} · ${status.text}`) : status.label}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderClinicTool(){
+      return `
+        <div class="tool-card">
+          <h3>🏥 ${e(t("result.clinicTitle"))}</h3>
+          <p>${e(t("result.clinicSub"))}</p>
+          <div class="btn-row">
+            <button class="btn btn-danger" onclick="state.clinicFinderShown = !state.clinicFinderShown; render();">${e(t("result.clinicButton"))}</button>
+          </div>
+          ${state.clinicFinderShown ? `
+            <div class="sim-note" style="margin-top:14px">
+              ${e(t("result.clinicHint"))}
+            </div>
+            <div class="grid" style="margin-top:14px">
+              <div class="result-card">
+                <h3>Clinic Card A</h3>
+                <p>${state.lang === "cn" ? "距离、营业状态、导航入口在此展示。" : "Distance, open status and navigation entry would appear here."}</p>
+              </div>
+              <div class="result-card">
+                <h3>Clinic Card B</h3>
+                <p>${state.lang === "cn" ? "可扩展为地图列表、电话拨打与备用资源。" : "This could expand into map results, click-to-call and fallback resources."}</p>
+              </div>
+            </div>
+          ` : ""}
+        </div>
+      `;
+    }
+
+    function renderResult(){
+      const def = currentResultDefinition();
+      if(!def){
+        return `
+          <div class="panel">
+            <div class="empty-state">${state.lang === "cn" ? "你还没有生成结果页。请先完成前面的判断。" : "No result yet. Complete the decision flow first."}</div>
+          </div>
+        `;
+      }
+      const pillTone = def.pillTone || "info";
+      const icon = state.result === "A" ? "👀" : state.result === "B" ? "🔥" : state.result === "C" ? "🚑" : "🛡️";
+      return `
+        <div class="panel">
+          <div class="section-title">
+            <div>
+              <h2>${e(t("result.sectionTitle"))}</h2>
+              <p>${e(t("result.sectionSub"))}</p>
+            </div>
+          </div>
+
+          <div class="result-hero">
+            <div class="result-top">
+              <div class="pill ${pillTone}">${e(def.pill)}</div>
+              <button class="btn btn-secondary" onclick="copyText(getSummaryText(), t('summary.copied'))">${e(t("result.summaryButton"))}</button>
+            </div>
+            <h2>${icon} ${e(def.title)}</h2>
+            <p>${e(def.intro)}</p>
+          </div>
+
+          <div class="meta-grid two">
+            <div class="result-card">
+              <h3>${e(t("result.now"))}</h3>
+              <div class="list">
+                ${def.now.map((item, idx) => `
+                  <div class="list-item">
+                    <div class="bullet">${idx + 1}</div>
+                    <div><strong>${e(item)}</strong></div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+
+            <div class="result-card">
+              <h3>${e(t("result.avoid"))}</h3>
+              <div class="list">
+                ${def.avoid.map((item) => `
+                  <div class="list-item">
+                    <div class="bullet">!</div>
+                    <div><span>${e(item)}</span></div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+
+          <div class="result-card" style="margin-top:14px">
+            <h3>${e(t("result.escalate"))}</h3>
+            <div class="list">
+              ${def.escalate.map((item) => `
+                <div class="list-item">
+                  <div class="bullet">↑</div>
+                  <div><span>${e(item)}</span></div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+
+          <div class="tool-row">
+            ${state.result === "A" ? renderTimerTool() : ""}
+            ${state.result === "C" ? renderClinicTool() : ""}
+            ${state.result === "B" ? `
+              <div class="tool-card">
+                <h3>🧺 ${state.lang === "cn" ? "保暖步骤提示" : "Warming steps"}</h3>
+                <p>${state.lang === "cn" ? "纸箱 + 毛巾 + 包裹暖源，是网页里最适合新手理解和执行的简化组合。" : "A box, towel and wrapped heat source create a simple warm nest that is easy for beginners to follow."}</p>
+                <div class="banner warn" style="margin-top:14px">⚠️ ${state.lang === "cn" ? "禁止喂牛奶；幼猫冰冷时不要喂食。" : "Do not give cow milk; do not feed a cold kitten."}</div>
+                <div class="btn-row">
+                  <button class="btn btn-secondary" onclick="goScreen('age')">${e(t("result.goAge"))}</button>
+                </div>
+              </div>
+            ` : ""}
+            ${state.result === "D" ? `
+              <div class="tool-card">
+                <h3>📍 ${state.lang === "cn" ? "短距离转移提示" : "Short-move reminder"}</h3>
+                <p>${state.lang === "cn" ? "转移后仍要继续观察，并尽量让母猫可以找到新的安全点。" : "After moving the kitten, keep watching and make sure the mother can still find the new safe spot."}</p>
+                <div class="btn-row">
+                  <button class="btn btn-secondary" onclick="startTimer(30)">${e(t("result.timer30"))}</button>
+                </div>
+              </div>
+            ` : ""}
+            <div class="tool-card">
+              <h3>🧰 ${e(t("result.tools"))}</h3>
+              <p>${state.lang === "cn" ? "把结果页做成“行动页”，比把它做成纯说明页更符合真实使用场景。" : "Turning a result page into an action page makes the prototype feel much closer to real use."}</p>
+              <div class="tool-actions">
+                <button class="btn btn-secondary" onclick="goScreen('age')">${e(t("result.goAge"))}</button>
+                <button class="btn btn-secondary" onclick="goScreen('help')">${e(t("result.goHelp"))}</button>
+                <button class="btn btn-secondary" onclick="goScreen('summary')">${e(t("result.goSummary"))}</button>
+              </div>
+            </div>
+          </div>
+
+          <details>
+            <summary>${e(t("result.whyLabel"))} <span>＋</span></summary>
+            <p>${e(def.why)}</p>
+          </details>
+
+          <div class="btn-row">
+            <button class="btn btn-secondary" onclick="goScreen('home')">${e(t("result.backHome"))}</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAgeSelect(label, field, placeholder, options, value){
+      return `
+        <div>
+          <label>${e(label)}</label>
+          <select onchange="updateAge('${field}', this.value)">
+            <option value="">${e(placeholder)}</option>
+            ${options.map(([val, text]) => `<option value="${e(val)}" ${value === val ? "selected" : ""}>${e(text)}</option>`).join("")}
+          </select>
+        </div>
+      `;
+    }
+
+    function renderAge(){
+      return `
+        <div class="panel">
+          <div class="section-title">
+            <div>
+              <h2>${e(t("age.title"))}</h2>
+              <p>${e(t("age.subtitle"))}</p>
+            </div>
+          </div>
+          <div class="form-grid two">
+            ${renderAgeSelect(t("age.fields.eyes"), "eyes", t("age.placeholders.eyes"), t("age.options.eyes"), state.age.eyes)}
+            ${renderAgeSelect(t("age.fields.ears"), "ears", t("age.placeholders.ears"), t("age.options.ears"), state.age.ears)}
+            ${renderAgeSelect(t("age.fields.movement"), "movement", t("age.placeholders.movement"), t("age.options.movement"), state.age.movement)}
+            ${renderAgeSelect(t("age.fields.teeth"), "teeth", t("age.placeholders.teeth"), t("age.options.teeth"), state.age.teeth)}
+          </div>
+          <div id="ageResultContainer"></div>
+        </div>
+      `;
+    }
+
+    function renderAgeResultOnly(){
+      const wrap = document.getElementById("ageResultContainer");
+      if(!wrap) return;
+      const key = getAgeEstimate();
+      state.age.estimateKey = key;
+      if(!key){
+        wrap.innerHTML = `<div class="age-result"><p>${e(t("age.empty"))}</p></div>`;
+        return;
+      }
+      const res = t(`age.results.${key}`);
+      wrap.innerHTML = `
+        <div class="age-result">
+          <div class="age-badge">📏 ${e(res.badge)}</div>
+          <h3>${e(res.title)}</h3>
+          <p>${e(res.body)}</p>
+          <div class="tool-actions">
+            <button class="btn btn-secondary" onclick="goScreen('help')">${e(t("age.actions.help"))}</button>
+            <button class="btn btn-secondary" onclick="goScreen('summary')">${e(t("age.actions.summary"))}</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderHelp(){
+      return `
+        <div class="panel">
+          <div class="section-title">
+            <div>
+              <h2>${e(t("help.title"))}</h2>
+              <p>${e(t("help.subtitle"))}</p>
+            </div>
+          </div>
+          <div class="banner info">ℹ️ ${e(t("help.autofill"))}</div>
+          <div class="form-grid two" style="margin-top:18px">
+            <div>
+              <label>${e(t("help.labels.area"))}</label>
+              <input type="text" value="${e(state.help.area)}" placeholder="${e(t("help.placeholders.area"))}" oninput="updateHelpField('area', this.value)">
+            </div>
+            <div>
+              <label>${e(t("help.labels.count"))}</label>
+              <input type="text" value="${e(state.help.count)}" placeholder="${e(t("help.placeholders.count"))}" oninput="updateHelpField('count', this.value)">
+            </div>
+            <div>
+              <label>${e(t("help.labels.mother"))}</label>
+              <select onchange="updateHelpField('mother', this.value)">
+                ${Object.entries(t("help.options.mother")).map(([val, text]) => `<option value="${e(val)}" ${state.help.mother === val ? "selected" : ""}>${e(text)}</option>`).join("")}
+              </select>
+            </div>
+            <div>
+              <label>${e(t("help.labels.injury"))}</label>
+              <select onchange="updateHelpField('injury', this.value)">
+                ${Object.entries(t("help.options.injury")).map(([val, text]) => `<option value="${e(val)}" ${state.help.injury === val ? "selected" : ""}>${e(text)}</option>`).join("")}
+              </select>
+            </div>
+            <div>
+              <label>${e(t("help.labels.action"))}</label>
+              <select onchange="updateHelpField('action', this.value)">
+                ${Object.entries(t("help.options.action")).map(([val, text]) => `<option value="${e(val)}" ${state.help.action === val ? "selected" : ""}>${e(text)}</option>`).join("")}
+              </select>
+            </div>
+            <div>
+              <label>${e(t("help.labels.contact"))}</label>
+              <input type="text" value="${e(state.help.contact)}" placeholder="${e(t("help.placeholders.contact"))}" oninput="updateHelpField('contact', this.value)">
+            </div>
+          </div>
+          <div class="form-grid" style="margin-top:14px">
+            <div>
+              <label>${e(t("help.labels.notes"))}</label>
+              <textarea placeholder="${e(t("help.placeholders.notes"))}" oninput="updateHelpField('notes', this.value)">${e(state.help.notes)}</textarea>
+            </div>
+          </div>
+          <div id="helpPreviewContainer"></div>
+        </div>
+      `;
+    }
+
+    function updateHelpPreviewOnly(){
+      const wrap = document.getElementById("helpPreviewContainer");
+      if(!wrap) return;
+      const text = getHelpText();
+      wrap.innerHTML = `
+        <div class="help-preview">
+          <h3>${e(t("help.previewTitle"))}</h3>
+          <div class="copy-box">${e(text)}</div>
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="copyText(getHelpText(), t('help.copied'))">${e(t("help.copy"))}</button>
+            <button class="btn btn-secondary" onclick="goScreen('summary')">${e(t("nav.summary"))}</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderResources(){
+      const cards = t("resources.cards");
+      return `
+        <div class="panel">
+          <div class="section-title">
+            <div>
+              <h2>${e(t("resources.title"))}</h2>
+              <p>${e(t("resources.subtitle"))}</p>
+            </div>
+          </div>
+
+          <div class="resource-grid">
+            ${cards.map(card => `
+              <div class="resource-card">
+                <h3>${card.icon} ${e(card.title)}</h3>
+                <p>${e(card.body)}</p>
+                <div class="resource-list">
+                  ${card.items.map(item => `<div class="resource-item">${e(item)}</div>`).join("")}
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSummary(){
+      if(!state.result && !state.observationStart){
+        return `
+          <div class="panel">
+            <div class="section-title">
+              <div>
+                <h2>${e(t("summary.title"))}</h2>
+                <p>${e(t("summary.subtitle"))}</p>
+              </div>
+            </div>
+            <div class="empty-state">${e(t("summary.noResult"))}</div>
+          </div>
+        `;
+      }
+      const ageEstimate = state.age.estimateKey ? t(`age.results.${state.age.estimateKey}.badge`) : "—";
+      return `
+        <div class="panel">
+          <div class="section-title">
+            <div>
+              <h2>${e(t("summary.title"))}</h2>
+              <p>${e(t("summary.subtitle"))}</p>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-row">
+              <div class="summary-key">${e(t("summary.labels.started"))}</div>
+              <div class="summary-value">${e(formatDateTime(state.observationStart))}</div>
+            </div>
+            <div class="summary-row">
+              <div class="summary-key">${e(t("summary.labels.result"))}</div>
+              <div class="summary-value">${e(currentResultTitle())}</div>
+            </div>
+            <div class="summary-row">
+              <div class="summary-key">${e(t("summary.labels.q0"))}</div>
+              <div class="summary-value">${e(answerText(state.answers.q0))}</div>
+            </div>
+            <div class="summary-row">
+              <div class="summary-key">${e(t("summary.labels.q1"))}</div>
+              <div class="summary-value">${e(answerText(state.answers.q1))}</div>
+            </div>
+            <div class="summary-row">
+              <div class="summary-key">${e(t("summary.labels.q2"))}</div>
+              <div class="summary-value">${e(answerText(state.answers.q2))}</div>
+            </div>
+            <div class="summary-row">
+              <div class="summary-key">${e(t("summary.labels.q3"))}</div>
+              <div class="summary-value">${e(answerText(state.answers.q3))}</div>
+            </div>
+            <div class="summary-row">
+              <div class="summary-key">${e(t("summary.labels.timer"))}</div>
+              <div class="summary-value" id="summaryTimerValue">${e(state.observationTimer ? getTimerStatus().label : t("summary.timerNone"))}</div>
+            </div>
+            <div class="summary-row">
+              <div class="summary-key">${e(t("summary.labels.age"))}</div>
+              <div class="summary-value">${e(ageEstimate)}</div>
+            </div>
+          </div>
+
+          <div class="copy-box">${e(getSummaryText())}</div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="copyText(getSummaryText(), t('summary.copied'))">${e(t("summary.copy"))}</button>
+            <button class="btn btn-secondary" onclick="resetFlow()">${e(t("summary.restart"))}</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function render(){
+      document.getElementById("brandSub").textContent = t("brandSub");
+      renderBottomNav();
+      document.getElementById("screen-home").innerHTML = renderHome();
+      document.getElementById("screen-first30").innerHTML = renderFirst30();
+      document.getElementById("screen-decision").innerHTML = renderDecision();
+      document.getElementById("screen-result").innerHTML = renderResult();
+      document.getElementById("screen-age").innerHTML = renderAge();
+      document.getElementById("screen-help").innerHTML = renderHelp();
+      document.getElementById("screen-resources").innerHTML = renderResources();
+      document.getElementById("screen-summary").innerHTML = renderSummary();
+
+      document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
+      const active = document.getElementById(`screen-${state.screen}`);
+      if(active) active.classList.add("active");
+
+      renderAgeResultOnly();
+      updateHelpPreviewOnly();
+      updateTimerDisplays();
+    }
+
+    document.getElementById("modal").addEventListener("click", (e) => {
+      if(e.target.id === "modal") closeModal();
+    });
+
+    setInterval(updateTimerDisplays, 1000);
+
+    render();
+  </script>
+</body>
+</html>
