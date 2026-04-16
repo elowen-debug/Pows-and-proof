@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paws & Proof – Interactive Web Prototype</title>
+  <title>Paws &amp; Proof | 幼猫应急判断</title>
   <style>
     :root{
       --bg:#faf6f0;
@@ -379,7 +379,7 @@
   <script>
     const content = {
       cn: {
-        brandSub: "新手救助者的数字第一响应工具",
+        brandSub: "给第一次遇到幼猫的人准备的现场判断工具",
         nav: {
           home: "首页",
           start: "开始",
@@ -388,256 +388,256 @@
           summary: "摘要"
         },
         home: {
-          eyebrow: "低门槛 · 现场可用 · 移动端优先",
-          title: "当你发现一只流浪幼猫时，先不要慌。",
-          lead: "这个网页原型把原本的 Figma 决策流程改成了可点击的交互网页。它会带你完成：先观察、再判断、再执行、最后求助。",
-          primary: "发现流浪幼猫？从这里开始",
-          emergency: "出现异常征兆？立即查看紧急处理",
+          eyebrow: "现场可用 · 步骤清楚 · 适合新手",
+          title: "看到路边幼猫时，先别急着抱走。",
+          lead: "先花两分钟判断现场情况，再决定是继续观察、先保暖，还是尽快送医。",
+          primary: "开始判断",
+          emergency: "我看到明显异常，先看紧急处理",
           chips: [
-            "约 2 分钟完成首轮判断",
-            "每次只做一个判断",
+            "约 2 分钟完成第一轮判断",
+            "一次只回答一个问题",
             "不替代兽医诊断"
           ],
           cards: [
             {
               icon: "🔎",
-              title: "Quick Age Check",
-              body: "根据眼睛、耳朵、行动和牙齿做一个粗略估龄，帮助判断护理方式。",
-              action: "打开估龄工具",
+              title: "幼猫年龄速查",
+              body: "根据眼睛、耳朵、行动和牙齿，粗略判断年龄阶段，方便决定下一步怎么照顾。",
+              action: "查看年龄速查",
               click: "goScreen('age')"
             },
             {
               icon: "🆘",
-              title: "How to Ask for Help",
-              body: "把现场信息整理成一段可复制的求助文案，便于发到社群或给志愿者看。",
-              action: "打开求助模板",
+              title: "生成求助文案",
+              body: "把现场信息整理成一段可复制的文字，发到社群、志愿者群或给医院看都会更清楚。",
+              action: "打开求助文案",
               click: "goScreen('help')"
             },
             {
               icon: "📚",
-              title: "Resources",
-              body: "按任务查看：第一反应、保暖、喂养基础、转运和可信学习资源。",
-              action: "打开资源库",
+              title: "护理资料",
+              body: "按眼前要做的事来找资料：观察、保暖、喂养、转运。",
+              action: "打开护理资料",
               click: "goScreen('resources')"
             }
           ],
           trust: [
             "适合第一次遇到幼猫的人",
-            "优先帮助你做下一步而不是读长文",
-            "包含不确定选项，减少误判压力"
+            "先帮你做判断，再决定要不要介入",
+            "拿不准时也能继续往下走"
           ]
         },
         first30: {
-          title: "紧急前 30 分钟",
-          subtitle: "先降低焦虑，再做判断。每一步只做一件事。",
+          title: "先做这几件事",
+          subtitle: "别急着下结论，先把最关键的情况看清楚。",
           prev: "上一步",
           next: "下一步",
-          done: "我已完成初步观察，开始判断下一步",
+          done: "看完了，开始判断",
           steps: [
             {
               icon: "🫶",
-              title: "先停一下，别急着抱走",
-              body: "你不需要立刻懂所有知识。先做最安全的观察，再决定下一步。",
-              tip: "目标：把“马上行动”的冲动，转换成“先确认情况”的节奏。"
+              title: "先停一下",
+              body: "你不需要立刻做完所有事。先确认现场情况，再决定下一步。",
+              tip: "先把节奏放慢，通常比凭直觉处理更稳妥。"
             },
             {
               icon: "↔️",
-              title: "保持距离",
-              body: "退后约 5–10 米，避免围观，让环境尽量安静，减少对母猫的惊扰。",
-              tip: "如果很多人围着看，母猫更可能不敢回来。"
+              title: "保持一点距离",
+              body: "退后约 5–10 米，减少围观和说话声，让环境尽量安静。",
+              tip: "人太靠近时，母猫常常不敢回来。"
             },
             {
               icon: "⏳",
-              title: "原地观察",
-              body: "不要立刻触碰或抱走。猫妈妈可能只是去觅食、躲人，或者短暂离开。",
+              title: "先观察，不要急着碰",
+              body: "不要马上触碰或抱走。母猫可能只是暂时离开觅食或躲人。",
               tip: "短时间没看到母猫，不等于幼猫已经被遗弃。"
             },
             {
               icon: "📷",
-              title: "拍摄记录",
-              body: "拍下幼猫及周围环境，记录时间、地点、天气和是否出现过母猫。",
-              tip: "这些记录会直接帮助你后续线上求助或向医院说明情况。"
+              title: "拍照并记下情况",
+              body: "拍下幼猫和周围环境，顺手记下时间、地点、天气，以及有没有看见母猫。",
+              tip: "后面要发求助或送医时，这些信息都会用得上。"
             },
             {
               icon: "🛡️",
-              title: "先处理环境风险",
-              body: "若幼猫在车流、狗群、暴雨曝晒或下水道附近，优先把它短距离移到附近更安全的位置。",
-              tip: "只移动到附近安全点，避免过远带离导致母猫找不到。"
+              title: "先排除现场危险",
+              body: "如果幼猫在车道边、狗群附近、暴雨曝晒下或下水道旁，先把它短距离移到附近更安全的位置。",
+              tip: "尽量不要带离太远，避免母猫找不到。"
             }
           ]
         },
         decision: {
-          title: "交互式决策工具",
-          subtitle: "一屏一个问题。每题都可以选择“我不确定”。",
+          title: "开始判断",
+          subtitle: "根据现场情况回答几个问题。拿不准时可以选“不确定”。",
           stepLabel: "问题",
           buttons: {
             yes: "是",
             no: "否",
             unsure: "不确定",
             restart: "重新开始",
-            back: "返回上一题"
+            back: "上一题"
           },
-          qHelpLabel: "怎么判断？",
+          qHelpLabel: "判断提示",
           questions: [
             {
               id: "q0",
-              label: "环境风险",
-              title: "幼猫当前所处位置是否有立即危险？",
-              help: "比如车道、暴雨曝晒、下水道口、狗群附近或会被人群踩踏的地方。",
-              detail: "先判断“环境是否马上会伤害到它”。如果有即时风险，先处理环境，再观察母猫是否回来。"
+              label: "现场环境",
+              title: "幼猫现在待的地方，是否马上有危险？",
+              help: "例如车流、人群、暴雨曝晒、下水道口，或附近有狗。",
+              detail: "先看环境会不会立刻伤到它。如果有，再决定怎么安全挪动。"
             },
             {
               id: "q1",
-              label: "母猫情况",
-              title: "猫妈妈在附近吗？",
-              help: "若你看见母猫返回、徘徊或有明显喂奶迹象，优先选择“是”。",
-              detail: "母猫可能不会在人类靠得太近时出现。保持距离更容易得到真实判断。"
+              label: "母猫",
+              title: "你觉得母猫还在附近吗？",
+              help: "如果看见母猫回来、在附近徘徊，或有喂奶迹象，可以选“是”。",
+              detail: "母猫可能不会在人类靠得太近时出现。保持一点距离更容易得到真实判断。"
             },
             {
               id: "q2",
-              label: "身体状态",
-              title: "幼猫是否有明显伤口、呼吸困难、极度虚弱或持续尖叫？",
-              help: "这一步主要用于识别需要尽快送医的情况。",
-              detail: "看不到外伤不代表没事。呼吸急促、无力抬头、对刺激反应很弱，都应提高警觉。"
+              label: "身体情况",
+              title: "幼猫有没有明显受伤、呼吸困难、很虚弱，或一直尖叫？",
+              help: "这一步主要用来判断是否需要尽快送医。",
+              detail: "就算看不到外伤，只要反应很弱、呼吸费力、几乎抬不起头，也要提高警觉。"
             },
             {
               id: "q3",
-              label: "体温状态",
-              title: "触摸幼猫时，它的身体是否冰凉？",
-              help: "如果明显偏冷，先保暖，不要急着喂食。",
-              detail: "体温低时消化和吞咽都可能有风险。先稳定体温，再决定下一步护理。"
+              label: "体温",
+              title: "摸起来时，幼猫身体是不是偏冷？",
+              help: "如果明显发冷，先保暖，不要急着喂。",
+              detail: "身体太冷时，先把体温稳住，再决定后面的护理。"
             }
           ]
         },
         modals: {
-          q2Title: "无法确定是否受伤？",
-          q2Body: "在现场无法清楚判断时，优先保守处理更安全。你可以直接进入紧急处理，也可以继续下一题。",
-          q2Urgent: "转到紧急处理",
+          q2Title: "拿不准是不是受伤？",
+          q2Body: "如果现场很难判断，谨慎一点通常更安全。你可以直接按紧急情况处理，也可以继续回答下一题。",
+          q2Urgent: "按紧急情况处理",
           q2Continue: "继续判断",
-          q3Title: "先保暖，不要喂食",
-          q3Body: "如果幼猫摸起来很冷，先做保暖，再决定喂食或转送。这个原型会先把你带到“保暖与初步护理”页面。",
-          q3Confirm: "知道了"
+          q3Title: "先保暖，先别喂",
+          q3Body: "如果摸起来很冷，先让幼猫回温，再决定喂食或转送。",
+          q3Confirm: "我知道了"
         },
         result: {
-          sectionTitle: "详细结果页",
-          sectionSub: "这里不是阅读终点，而是立即行动的工作台。",
-          tools: "可用工具",
-          now: "现在就做",
-          avoid: "先别这样做",
-          escalate: "什么时候升级处理",
+          sectionTitle: "接下来这样做",
+          sectionSub: "先按下面的步骤处理，再看是否需要继续求助或送医。",
+          tools: "接下来还可以",
+          now: "先做这些",
+          avoid: "先不要这样做",
+          escalate: "出现这些情况就升级处理",
           why: "为什么会得到这个建议？",
-          whyLabel: "展开说明",
-          goAge: "打开估龄工具",
+          whyLabel: "为什么是这个结果",
+          goAge: "查看年龄速查",
           goHelp: "生成求助文案",
           goSummary: "查看现场摘要",
           backHome: "回到首页",
-          timerTitle: "观察倒计时",
-          timerSub: "为“原地观察”路径准备的轻量倒计时工具。",
+          timerTitle: "观察计时",
+          timerSub: "适用于“继续观察”的情况。",
           timer30: "30 分钟",
           timer120: "2 小时",
           timer240: "4 小时",
-          timerIdle: "尚未启动倒计时",
+          timerIdle: "还没有开始计时",
           timerActive: "剩余时间",
-          timerEnded: "建议重新评估：倒计时已结束",
-          clinicTitle: "24 小时医院入口（原型占位）",
-          clinicSub: "正式开发时可接入地图 API。交互原型中展示的是按钮与信息结构，而非真实定位结果。",
-          clinicButton: "模拟查找最近 24 小时宠物医院",
-          clinicHint: "示例：这里可展示“附近医院卡片、距离、营业状态、导航入口”。",
+          timerEnded: "计时结束，建议重新判断",
+          clinicTitle: "附近 24 小时医院",
+          clinicSub: "需要尽快送医时，可先查看附近仍在营业的宠物医院。",
+          clinicButton: "查看附近医院",
+          clinicHint: "这里会显示附近医院列表、距离和导航入口。",
           summaryButton: "复制摘要",
           definitions: {
             A: {
-              pill: "建议 A",
+              pill: "继续观察",
               pillTone: "info",
-              title: "原地观察 Wait & Watch",
-              intro: "当前最优先的动作，是继续保持距离并观察母猫是否回来，而不是立刻带走。",
+              title: "继续观察，先不要带走",
+              intro: "如果母猫可能还在附近，现在更稳妥的做法是继续观察，而不是马上把幼猫带走。",
               now: [
-                "开始一个观察倒计时：30 分钟、2 小时或 4 小时。",
-                "保持现场安静，减少围观和重复靠近。",
-                "继续记录母猫是否出现、是否喂奶、幼猫是否变冷或持续尖叫。"
+                "先设一个观察计时：30 分钟、2 小时或 4 小时。",
+                "保持环境安静，尽量不要反复靠近。",
+                "继续留意母猫有没有回来、幼猫有没有变冷或持续尖叫。"
               ],
               avoid: [
-                "不要因为焦虑立刻抱走。",
-                "不要频繁触碰，避免打断母猫接近。",
-                "不要在公开平台暴露过于精确的位置。"
+                "不要因为着急就立刻抱走。",
+                "不要一直触碰或围着看。",
+                "公开求助时，先不要写得太具体到门牌。"
               ],
               escalate: [
-                "观察窗口结束仍未见母猫。",
-                "幼猫开始变冷、变弱或环境转危险。",
+                "等了一段时间还是没有母猫回来。",
+                "幼猫开始发冷、没力气，或环境变得更危险。",
                 "出现伤口、呼吸异常、明显虚弱。"
               ],
-              why: "因为母猫在附近时，最安全的第一选择通常是观察而不是立刻介入。对新手来说，网页应先帮助用户降低误判和过度干预。"
+              why: "母猫仍在附近时，直接带走可能会打断照顾。先观察，通常更稳妥。"
             },
             B: {
-              pill: "建议 B",
+              pill: "先保暖",
               pillTone: "warn",
-              title: "保暖与初步护理 Warming & Care",
-              intro: "如果幼猫偏冷、无明显重伤，当前优先级是保暖和稳定，而不是立刻喂食。",
+              title: "先保暖，再决定下一步",
+              intro: "如果幼猫摸起来偏冷、暂时没有明显重伤，眼前最重要的是先保暖。",
               now: [
-                "用纸箱、毛巾和包裹好的暖源做一个简易保暖窝。",
-                "让窝里保持一半温暖、一半较凉，避免过热。",
-                "先保暖，再决定是否需要喂食或继续观察。"
+                "准备纸箱、毛巾和包好的暖源，做一个临时保暖窝。",
+                "让窝里留出一块不那么热的地方，避免过热。",
+                "等体温稳一点，再决定是否喂食或转送。"
               ],
               avoid: [
-                "不要给牛奶。",
-                "不要在幼猫很冷时立刻喂食。",
-                "不要急着洗澡或长时间抱在外面吹风。"
+                "不要喂牛奶。",
+                "幼猫还很冷时，不要急着喂。",
+                "不要马上洗澡，或一直抱在外面吹风。"
               ],
               escalate: [
-                "保暖后仍无力、无反应或呼吸异常。",
-                "发现寄生虫、外伤、持续虚弱。",
-                "你无法判断年龄或护理方式。"
+                "保暖一段时间后还是没精神、没反应，或呼吸不对。",
+                "发现寄生虫很多、外伤明显，或越来越虚弱。",
+                "你拿不准年龄，也不确定接下来怎么照顾。"
               ],
-              why: "因为低体温会让吞咽和消化更危险。网页在这里要把用户从“喂点东西”这种直觉操作，切换到更安全的“先保暖”。"
+              why: "体温太低时，喂食反而可能有风险。先保暖，比先喂东西更安全。"
             },
             C: {
-              pill: "建议 C",
+              pill: "尽快就医",
               pillTone: "danger",
-              title: "紧急送医 Emergency Medical Care",
-              intro: "如果幼猫有明显伤口、呼吸困难或极度虚弱，应优先寻求兽医帮助。",
+              title: "尽快送医",
+              intro: "如果幼猫有明显伤口、呼吸困难或非常虚弱，优先联系医院或尽快送医。",
               now: [
-                "先保持安静并尽量保暖。",
-                "把幼猫放入铺有毛巾的纸箱或安全容器中。",
-                "尽快前往宠物医院或联系能提供现场指导的专业机构。"
+                "先把幼猫放进铺了毛巾的纸箱或安全容器里。",
+                "保持安静，并尽量帮它保暖。",
+                "尽快去宠物医院，或联系能提供现场指导的专业机构。"
               ],
               avoid: [
-                "不要反复抱出查看。",
-                "不要边移动边尝试复杂处理。",
-                "不要因为不确定而拖延太久。"
+                "不要反复抱出来看。",
+                "移动途中不要一边走一边做复杂处理。",
+                "不要因为不确定而拖太久。"
               ],
               escalate: [
-                "已经属于最高优先级路径。",
-                "运输途中若状态继续恶化，应在联系医院时说明症状。",
-                "到院前保持温暖与安静。"
+                "这已经是需要优先处理的情况。",
+                "如果路上状态更差，记得及时告诉医院。",
+                "到院前继续保持温暖和安静。"
               ],
-              why: "因为这类症状代表网页不该再让用户停留在“继续阅读”，而应该立刻把界面转为“执行模式”。"
+              why: "出现这些症状时，最重要的是尽快让专业人员接手。"
             },
             D: {
-              pill: "建议 D",
+              pill: "先挪到安全点",
               pillTone: "success",
-              title: "先移到附近安全点，再观察",
-              intro: "如果环境本身有立即危险，可以把幼猫短距离移到附近更安全的位置，然后继续观察母猫。",
+              title: "先移到附近安全点，再继续观察",
+              intro: "如果眼前最大的风险来自环境，可以先把幼猫短距离移到附近更安全的位置，再继续观察。",
               now: [
-                "只移动到附近安全点，不要带离太远。",
-                "在新的安全点继续等待与观察。",
-                "记录新位置、时间，以及母猫是否能找到幼猫。"
+                "只挪到附近安全点，别带得太远。",
+                "挪过去以后继续观察母猫有没有回来。",
+                "记下新的位置和时间，方便后续说明情况。"
               ],
               avoid: [
-                "不要因为环境危险而直接带回家很远。",
-                "不要把幼猫放进完全暴露或太冷太热的地方。",
-                "不要忘记继续观察母猫。"
+                "不要一看到危险就直接带回家很远。",
+                "不要把幼猫放到完全暴露、太冷或太热的地方。",
+                "挪完以后不要忘了继续观察。"
               ],
               escalate: [
-                "移到安全点后仍未见母猫且幼猫变弱。",
-                "环境条件继续恶化。",
+                "挪到安全点后，母猫还是没出现，而且幼猫越来越弱。",
+                "天气或环境继续恶化。",
                 "你发现伤口、呼吸异常或低体温。"
               ],
-              why: "因为现实情况不总是“马上救走”或“完全不动”二选一，网页需要为“环境危险但仍可能有母猫”提供中间路径。"
+              why: "有些情况不是“马上带走”或“完全别动”两选一，先挪到安全点会更合适。"
             }
           }
         },
         age: {
-          title: "Quick Age Check 幼猫年龄速查",
-          subtitle: "这是一个轻量判断器，不是医学诊断。目的是帮助你决定“下一步最安全的护理方向”。",
+          title: "幼猫年龄速查",
+          subtitle: "通过眼睛、耳朵、行动和牙齿，粗略判断年龄阶段。只用于现场参考。",
           fields: {
             eyes: "眼睛",
             ears: "耳朵",
@@ -669,37 +669,37 @@
               ["many", "已经有比较明显的乳牙"]
             ]
           },
-          empty: "完成上面的选择后，这里会显示一个大致年龄范围和护理提醒。",
+          empty: "选完上面的项目后，这里会显示大致年龄和护理提醒。",
           results: {
             a: {
               badge: "约 0–1 周",
-              title: "刚出生到很小",
-              body: "优先保暖。若仍在现场且母猫可能回来，不要急着带走。任何喂养决策都应非常谨慎，尤其不要喂牛奶。"
+              title: "还很小",
+              body: "先保暖最重要。如果母猫可能还在附近，先不要急着带走。喂养要非常谨慎，更不要喂牛奶。"
             },
             b: {
               badge: "约 1–2 周",
-              title: "眼睛打开但仍非常脆弱",
-              body: "保暖仍是优先项。若没有母猫照顾，需要更细致的护理与频繁观察。"
+              title: "眼睛刚睁开，仍然很脆弱",
+              body: "这个阶段仍以保暖和稳定为主。如果没有母猫照顾，需要更细致的观察和护理。"
             },
             c: {
               badge: "约 2–4 周",
-              title: "开始更明显活动",
-              body: "可能已经开始探索环境，但仍需要稳定保暖与更合适的喂养方式判断。"
+              title: "开始活动，但还需要细心照顾",
+              body: "可能已经会慢慢活动，但仍要先看体温、精神和整体状态，再决定怎么喂。"
             },
             d: {
               badge: "约 4–8 周",
-              title: "可活动、可能逐步过渡食物",
-              body: "可进一步评估是否能吃幼猫湿粮 / 奶糕，但仍要先确认体温、精神和整体状态。"
+              title: "活动力较好，可能开始过渡食物",
+              body: "可以进一步评估是否能吃幼猫湿粮或奶糕，但还是要先确认精神和身体状态。"
             }
           },
           actions: {
-            help: "用这个估龄结果生成求助文案",
-            summary: "把估龄结果写入摘要"
+            help: "按这个结果生成求助文案",
+            summary: "把这个结果写入摘要"
           }
         },
         help: {
-          title: "如何在线求助",
-          subtitle: "把现场观察自动整理成一段更完整的求助文案，便于发到社群、给志愿者或医院看。",
+          title: "生成求助文案",
+          subtitle: "把现场情况整理成一段清楚、可复制的文字，发给社群、志愿者或医院都会更方便。",
           labels: {
             area: "大致地点",
             count: "幼猫数量",
@@ -727,25 +727,25 @@
               hurt: "明显受伤 / 呼吸异常"
             },
             action: {
-              watching: "正在原地观察",
+              watching: "正在观察",
               warming: "正在保暖",
               moving: "准备转送 / 就医"
             }
           },
-          previewTitle: "可复制文案",
+          previewTitle: "可复制内容",
           copy: "复制文案",
           copied: "求助文案已复制",
-          empty: "填写上方内容后，这里会自动生成求助文案。",
-          autofill: "已自动结合你前面流程中的现场记录与建议结果。"
+          empty: "填完上面的内容后，这里会自动生成一段可复制的文字。",
+          autofill: "已带入你前面记录的关键信息。"
         },
         resources: {
-          title: "资源库",
-          subtitle: "按任务查找，而不是按来源查找。更符合紧急情境中的使用逻辑。",
+          title: "护理资料",
+          subtitle: "按你现在要做的事来找资料，会更快。",
           cards: [
             {
               icon: "🧭",
               title: "第一反应",
-              body: "先观察、先判断环境风险、避免立刻抱走。",
+              body: "先观察、先看环境，再决定要不要介入。",
               items: [
                 "发现幼猫后的前 30 分钟要做什么",
                 "什么情况下应该先退后观察",
@@ -755,7 +755,7 @@
             {
               icon: "🔥",
               title: "保暖与稳定",
-              body: "低体温是高风险点，网页要先把用户带到保暖逻辑。",
+              body: "体温太低时，先保暖往往比先喂更重要。",
               items: [
                 "如何搭一个简易保暖窝",
                 "为什么先保暖再决定喂食",
@@ -765,7 +765,7 @@
             {
               icon: "🍽️",
               title: "喂养基础",
-              body: "只有在体温相对稳定后，喂养问题才值得进入下一步。",
+              body: "等体温和状态相对稳定后，再考虑喂养问题。",
               items: [
                 "估龄与喂食方式的关系",
                 "何时可能过渡到幼猫粮",
@@ -775,7 +775,7 @@
             {
               icon: "🤝",
               title: "求助与转运",
-              body: "把观察结果转成标准化信息，更容易获得有效帮助。",
+              body: "把现场信息整理清楚，更容易获得有效帮助。",
               items: [
                 "如何写一条高质量求助帖",
                 "给志愿者 / 医院看的摘要应包含哪些内容",
@@ -785,8 +785,8 @@
           ]
         },
         summary: {
-          title: "Case Summary 现场摘要",
-          subtitle: "把前面流程中的关键信息收束为一张摘要卡，便于你继续处理或转发。",
+          title: "现场摘要",
+          subtitle: "把目前掌握的情况整理成一张简短记录，方便继续处理或转发。",
           labels: {
             started: "开始观察时间",
             result: "当前建议",
@@ -794,7 +794,7 @@
             q1: "母猫是否在附近",
             q2: "是否有严重异常",
             q3: "是否触感冰凉",
-            timer: "观察倒计时",
+            timer: "观察计时",
             age: "估龄结果"
           },
           answerMap: {
@@ -806,11 +806,11 @@
           timerNone: "未启动",
           copy: "复制摘要",
           copied: "摘要已复制",
-          restart: "重新开始流程",
-          noResult: "你还没有完成决策路径。可以先从首页开始，或直接打开“开始判断”。"
+          restart: "重新开始",
+          noResult: "你还没有开始记录。可以先从首页开始。"
         },
         common: {
-          demoNote: "这是一个交互网页原型：重点在信息结构与流程体验，不包含真实定位与后端服务。",
+          demoNote: "给第一次遇到幼猫的人准备的现场判断工具。",
           copyOk: "已复制到剪贴板",
           restart: "重新开始",
           home: "回到首页"
@@ -1557,7 +1557,7 @@
         lines.push("【幼猫求助】");
         lines.push(`地点：${state.help.area || "（待补充）"}`);
         lines.push(`数量：${state.help.count || "1"}`);
-        lines.push(`母猫情况：${motherMap[state.help.mother]}`);
+        lines.push(`母猫：${motherMap[state.help.mother]}`);
         lines.push(`状态：${injuryMap[state.help.injury]}`);
         lines.push(`当前处理：${actionMap[state.help.action]}`);
         if(state.result) lines.push(`当前建议：${currentResultTitle()}`);
@@ -1787,12 +1787,12 @@
             </div>
             <div class="grid" style="margin-top:14px">
               <div class="result-card">
-                <h3>Clinic Card A</h3>
-                <p>${state.lang === "cn" ? "距离、营业状态、导航入口在此展示。" : "Distance, open status and navigation entry would appear here."}</p>
+                <h3>医院列表示意 1</h3>
+                <p>${state.lang === "cn" ? "这里会显示距离、营业状态和导航入口。" : "Distance, open status and navigation entry would appear here."}</p>
               </div>
               <div class="result-card">
-                <h3>Clinic Card B</h3>
-                <p>${state.lang === "cn" ? "可扩展为地图列表、电话拨打与备用资源。" : "This could expand into map results, click-to-call and fallback resources."}</p>
+                <h3>医院列表示意 2</h3>
+                <p>${state.lang === "cn" ? "也可以继续扩展为电话拨打和备用资源。" : "This could expand into map results, click-to-call and fallback resources."}</p>
               </div>
             </div>
           ` : ""}
@@ -1805,7 +1805,7 @@
       if(!def){
         return `
           <div class="panel">
-            <div class="empty-state">${state.lang === "cn" ? "你还没有生成结果页。请先完成前面的判断。" : "No result yet. Complete the decision flow first."}</div>
+            <div class="empty-state">${state.lang === "cn" ? "还没有结果，请先完成前面的判断。" : "No result yet. Complete the decision flow first."}</div>
           </div>
         `;
       }
@@ -1872,9 +1872,9 @@
             ${state.result === "C" ? renderClinicTool() : ""}
             ${state.result === "B" ? `
               <div class="tool-card">
-                <h3>🧺 ${state.lang === "cn" ? "保暖步骤提示" : "Warming steps"}</h3>
-                <p>${state.lang === "cn" ? "纸箱 + 毛巾 + 包裹暖源，是网页里最适合新手理解和执行的简化组合。" : "A box, towel and wrapped heat source create a simple warm nest that is easy for beginners to follow."}</p>
-                <div class="banner warn" style="margin-top:14px">⚠️ ${state.lang === "cn" ? "禁止喂牛奶；幼猫冰冷时不要喂食。" : "Do not give cow milk; do not feed a cold kitten."}</div>
+                <h3>🧺 ${state.lang === "cn" ? "保暖提示" : "Warming steps"}</h3>
+                <p>${state.lang === "cn" ? "先准备纸箱、毛巾和包好的暖源，让幼猫有一个安静、保暖的临时窝。" : "A box, towel and wrapped heat source create a simple warm nest that is easy for beginners to follow."}</p>
+                <div class="banner warn" style="margin-top:14px">⚠️ ${state.lang === "cn" ? "不要喂牛奶；幼猫还很冷时不要喂食。" : "Do not give cow milk; do not feed a cold kitten."}</div>
                 <div class="btn-row">
                   <button class="btn btn-secondary" onclick="goScreen('age')">${e(t("result.goAge"))}</button>
                 </div>
@@ -1882,8 +1882,8 @@
             ` : ""}
             ${state.result === "D" ? `
               <div class="tool-card">
-                <h3>📍 ${state.lang === "cn" ? "短距离转移提示" : "Short-move reminder"}</h3>
-                <p>${state.lang === "cn" ? "转移后仍要继续观察，并尽量让母猫可以找到新的安全点。" : "After moving the kitten, keep watching and make sure the mother can still find the new safe spot."}</p>
+                <h3>📍 ${state.lang === "cn" ? "转移提醒" : "Short-move reminder"}</h3>
+                <p>${state.lang === "cn" ? "挪到安全点后，继续观察，尽量让母猫还能找到它。" : "After moving the kitten, keep watching and make sure the mother can still find the new safe spot."}</p>
                 <div class="btn-row">
                   <button class="btn btn-secondary" onclick="startTimer(30)">${e(t("result.timer30"))}</button>
                 </div>
@@ -1891,7 +1891,7 @@
             ` : ""}
             <div class="tool-card">
               <h3>🧰 ${e(t("result.tools"))}</h3>
-              <p>${state.lang === "cn" ? "把结果页做成“行动页”，比把它做成纯说明页更符合真实使用场景。" : "Turning a result page into an action page makes the prototype feel much closer to real use."}</p>
+              <p>${state.lang === "cn" ? "你还可以继续估龄、整理求助信息，或把摘要复制给别人。" : "Turning a result page into an action page makes the prototype feel much closer to real use."}</p>
               <div class="tool-actions">
                 <button class="btn btn-secondary" onclick="goScreen('age')">${e(t("result.goAge"))}</button>
                 <button class="btn btn-secondary" onclick="goScreen('help')">${e(t("result.goHelp"))}</button>
@@ -2036,7 +2036,7 @@
       `;
     }
 
-    function renderResources(){
+    function render护理资料(){
       const cards = t("resources.cards");
       return `
         <div class="panel">
@@ -2140,7 +2140,7 @@
       document.getElementById("screen-result").innerHTML = renderResult();
       document.getElementById("screen-age").innerHTML = renderAge();
       document.getElementById("screen-help").innerHTML = renderHelp();
-      document.getElementById("screen-resources").innerHTML = renderResources();
+      document.getElementById("screen-resources").innerHTML = render护理资料();
       document.getElementById("screen-summary").innerHTML = renderSummary();
 
       document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
